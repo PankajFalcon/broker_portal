@@ -6,8 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		1E2038FC0FBEEDAB39506965 /* Pods_Broker_Portal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DF01893BA6831EFC04483F3 /* Pods_Broker_Portal.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		2C0BECD92DB64DD6008AD6C4 /* Broker Portal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Broker Portal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DF01893BA6831EFC04483F3 /* Pods_Broker_Portal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Broker_Portal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1366B459C662099711E4EE3 /* Pods-Broker Portal.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Broker Portal.release.xcconfig"; path = "Target Support Files/Pods-Broker Portal/Pods-Broker Portal.release.xcconfig"; sourceTree = "<group>"; };
+		E087BB02F310E4DED2DE32B0 /* Pods-Broker Portal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Broker Portal.debug.xcconfig"; path = "Target Support Files/Pods-Broker Portal/Pods-Broker Portal.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E2038FC0FBEEDAB39506965 /* Pods_Broker_Portal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,6 +55,8 @@
 			children = (
 				2C0BECDB2DB64DD6008AD6C4 /* Broker Portal */,
 				2C0BECDA2DB64DD6008AD6C4 /* Products */,
+				D11D7581F32E5925EB8F9DB6 /* Pods */,
+				51EC0A35F2E713E3D02A9C59 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,6 +68,23 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		51EC0A35F2E713E3D02A9C59 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2DF01893BA6831EFC04483F3 /* Pods_Broker_Portal.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D11D7581F32E5925EB8F9DB6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E087BB02F310E4DED2DE32B0 /* Pods-Broker Portal.debug.xcconfig */,
+				A1366B459C662099711E4EE3 /* Pods-Broker Portal.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -65,6 +92,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2C0BECEC2DB64DD8008AD6C4 /* Build configuration list for PBXNativeTarget "Broker Portal" */;
 			buildPhases = (
+				26284928206775D0CA5CA162 /* [CP] Check Pods Manifest.lock */,
 				2C0BECD52DB64DD6008AD6C4 /* Sources */,
 				2C0BECD62DB64DD6008AD6C4 /* Frameworks */,
 				2C0BECD72DB64DD6008AD6C4 /* Resources */,
@@ -77,8 +105,6 @@
 				2C0BECDB2DB64DD6008AD6C4 /* Broker Portal */,
 			);
 			name = "Broker Portal";
-			packageProductDependencies = (
-			);
 			productName = "Broker Portal";
 			productReference = 2C0BECD92DB64DD6008AD6C4 /* Broker Portal.app */;
 			productType = "com.apple.product-type.application";
@@ -127,6 +153,31 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		26284928206775D0CA5CA162 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Broker Portal-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		2C0BECD52DB64DD6008AD6C4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -140,6 +191,7 @@
 /* Begin XCBuildConfiguration section */
 		2C0BECED2DB64DD8008AD6C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E087BB02F310E4DED2DE32B0 /* Pods-Broker Portal.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -171,6 +223,7 @@
 		};
 		2C0BECEE2DB64DD8008AD6C4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A1366B459C662099711E4EE3 /* Pods-Broker Portal.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
