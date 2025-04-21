@@ -49,8 +49,8 @@ public extension UITextField {
     /// Remove error label and reset border
     func removeError() {
         superview?.viewWithTag(999)?.removeFromSuperview()
-        layer.borderColor = UIColor.clear.cgColor
-        layer.borderWidth = 0
+        layer.borderColor = UIColor.lightGray.cgColor
+        layer.borderWidth = 1
     }
     
     /// Shake animation

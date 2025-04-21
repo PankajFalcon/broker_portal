@@ -24,6 +24,20 @@ public extension UIViewController {
     func push<T: UIViewController>(_ type: T.Type, from storyboard: AppStoryboard, setup: ((T) -> Void)? = nil) {
         let vc = T.instantiate(from: storyboard)
         setup?(vc)
-        self.navigationController?.pushViewController(vc, animated: true)
+        
+        guard let navigationController = self.navigationController else {
+            debugPrint("NavigationController not found. Make sure this view controller is embedded in a UINavigationController.")
+            return
+        }
+        
+        navigationController.pushViewController(vc, animated: true)
     }
+    
+    /// Present a view controller from storyboard onto the current navigation stack
+    func present<T: UIViewController>(_ type: T.Type, from storyboard: AppStoryboard, setup: ((T) -> Void)? = nil) {
+        let vc = T.instantiate(from: storyboard)
+        setup?(vc)
+        present(vc, animated: true)
+    }
+    
 }

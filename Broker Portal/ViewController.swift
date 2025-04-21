@@ -8,12 +8,11 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     @IBOutlet weak var emailTextField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func validate(_ sender: UIButton) {
@@ -26,9 +25,8 @@ class ViewController: UIViewController {
             return
         }
         
-        emailTextField.removeError() // call this to reset UI if valid
+        emailTextField.removeError()
     }
-
-
+    
 }
 
