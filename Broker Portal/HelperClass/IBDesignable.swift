@@ -160,15 +160,113 @@ public extension UITextField {
 @IBDesignable
 public extension UITextView {
     
-    @IBInspectable var horizontalPadding: CGFloat {
-        get { return textContainerInset.left } // Assuming symmetrical
+    // MARK: - Associated Keys
+    private struct AssociatedKeys {
+        static var placeholderLabel = "placeholderLabel"
+        static var placeholderText = "placeholderText"
+        static var placeholderColor = "placeholderColor"
+        static var padding = "padding"
+    }
+
+    // MARK: - Placeholder Label
+    private var placeholderLabel: UILabel {
+        if let label = objc_getAssociatedObject(self, &AssociatedKeys.placeholderLabel) as? UILabel {
+            return label
+        }
+
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = self.font
+        label.textColor = placeholderColor
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = false
+        addSubview(label)
+
+        objc_setAssociatedObject(self, &AssociatedKeys.placeholderLabel, label, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+
+        updatePlaceholderConstraints()
+
+        return label
+    }
+
+    // MARK: - Placeholder Text
+    @IBInspectable var placeholder: String {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.placeholderText) as? String ?? ""
+        }
         set {
-            textContainerInset = UIEdgeInsets(
-                top: textContainerInset.top,
-                left: newValue,
-                bottom: textContainerInset.bottom,
-                right: newValue
-            )
+            objc_setAssociatedObject(self, &AssociatedKeys.placeholderText, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+            placeholderLabel.text = newValue
+            placeholderLabel.isHidden = !text.isEmpty
+            NotificationCenter.default.removeObserver(self, name: UITextView.textDidChangeNotification, object: self)
+            NotificationCenter.default.addObserver(self, selector: #selector(textDidChange), name: UITextView.textDidChangeNotification, object: self)
         }
     }
+
+    // MARK: - Placeholder Color
+    @IBInspectable var placeholderColor: UIColor {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.placeholderColor) as? UIColor ?? .lightGray
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.placeholderColor, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            placeholderLabel.textColor = newValue
+        }
+    }
+
+    // MARK: - Padding (textContainerInset)
+    @IBInspectable var paddingTop: CGFloat {
+        get { return textContainerInset.top }
+        set {
+            textContainerInset.top = newValue
+            updatePlaceholderConstraints()
+        }
+    }
+
+    @IBInspectable var paddingLeft: CGFloat {
+        get { return textContainerInset.left }
+        set {
+            textContainerInset.left = newValue
+            updatePlaceholderConstraints()
+        }
+    }
+
+    @IBInspectable var paddingBottom: CGFloat {
+        get { return textContainerInset.bottom }
+        set {
+            textContainerInset.bottom = newValue
+            updatePlaceholderConstraints()
+        }
+    }
+
+    @IBInspectable var paddingRight: CGFloat {
+        get { return textContainerInset.right }
+        set {
+            textContainerInset.right = newValue
+            updatePlaceholderConstraints()
+        }
+    }
+
+    // MARK: - Placeholder Visibility
+    @objc private func textDidChange() {
+        placeholderLabel.isHidden = !text.isEmpty
+    }
+
+    // MARK: - Update Placeholder Constraints
+    private func updatePlaceholderConstraints() {
+        guard let label = objc_getAssociatedObject(self, &AssociatedKeys.placeholderLabel) as? UILabel else { return }
+
+        NSLayoutConstraint.deactivate(label.constraints)
+        label.removeConstraints(label.constraints)
+        label.removeFromSuperview()
+        addSubview(label)
+
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: self.topAnchor, constant: textContainerInset.top),
+            label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: textContainerInset.left + textContainer.lineFragmentPadding),
+            label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -(textContainerInset.right + textContainer.lineFragmentPadding))
+        ])
+    }
 }
+
+
