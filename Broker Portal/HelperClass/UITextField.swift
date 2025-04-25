@@ -6,32 +6,32 @@
 //
 
 import UIKit
+import ObjectiveC
+
+private var errorLabelKey: UInt8 = 0
 
 public extension UITextField {
     
-    /// Show error message below the text field with red border and shake animation
     func showError(message: String,
-                   font: UIFont = .appRegular(12),
+                   font: UIFont = .appRegular(12,true),
                    textColor: UIColor = .red,
                    borderColor: UIColor = .red) {
         
-        // Remove existing error label if any
-        removeError()
+        removeError() // Clean up previous label if any
         
-        // Add border color
+        // Border styling
         layer.borderWidth = 1
         layer.cornerRadius = 6
         layer.borderColor = borderColor.cgColor
         
-        // Create and configure error label
+        // Create error label
         let errorLabel = UILabel()
         errorLabel.text = message
         errorLabel.font = font
         errorLabel.textColor = textColor
         errorLabel.numberOfLines = 0
-        errorLabel.tag = 999 // tag to identify for cleanup
         
-        // Add label below the text field
+        // Add to superview
         guard let superview = self.superview else { return }
         errorLabel.translatesAutoresizingMaskIntoConstraints = false
         superview.addSubview(errorLabel)
@@ -42,18 +42,24 @@ public extension UITextField {
             errorLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -4)
         ])
         
-        // Animate shake
+        // Save reference using associated object
+        objc_setAssociatedObject(self, &errorLabelKey, errorLabel, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        
+        // Shake animation
         shake()
     }
     
-    /// Remove error label and reset border
     func removeError() {
-        superview?.viewWithTag(999)?.removeFromSuperview()
-        layer.borderColor = UIColor.lightGray.cgColor
-        layer.borderWidth = 1
+        if let containerView = objc_getAssociatedObject(self, &errorLabelKey) as? UIView {
+            containerView.removeFromSuperview()
+            objc_setAssociatedObject(self, &errorLabelKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+        
+        // Reset to system-default look
+        layer.borderWidth = 0
+        layer.borderColor = nil
     }
     
-    /// Shake animation
     private func shake() {
         let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
         animation.timingFunction = CAMediaTimingFunction(name: .linear)

@@ -7,18 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1E2038FC0FBEEDAB39506965 /* Pods_Broker_Portal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DF01893BA6831EFC04483F3 /* Pods_Broker_Portal.framework */; };
+		2CED9A752DB7AA5000433D72 /* Pods_Broker_Portal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DF01893BA6831EFC04483F3 /* Pods_Broker_Portal.framework */; };
+		2CED9A762DB7AA5000433D72 /* Pods_Broker_Portal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2DF01893BA6831EFC04483F3 /* Pods_Broker_Portal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2CED9A742DB7AA4A00433D72 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				2CED9A762DB7AA5000433D72 /* Pods_Broker_Portal.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2C0BECD92DB64DD6008AD6C4 /* Broker Portal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Broker Portal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2CED9A712DB7AA4A00433D72 /* FalconAPIFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FalconAPIFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DF01893BA6831EFC04483F3 /* Pods_Broker_Portal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Broker_Portal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1366B459C662099711E4EE3 /* Pods-Broker Portal.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Broker Portal.release.xcconfig"; path = "Target Support Files/Pods-Broker Portal/Pods-Broker Portal.release.xcconfig"; sourceTree = "<group>"; };
 		E087BB02F310E4DED2DE32B0 /* Pods-Broker Portal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Broker Portal.debug.xcconfig"; path = "Target Support Files/Pods-Broker Portal/Pods-Broker Portal.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		2C0BECEB2DB64DD8008AD6C4 /* Exceptions for "Broker Portal" folder in "Broker Portal" target */ = {
+		2CF1F0A62DBBBADC0054B00E /* Exceptions for "Broker Portal" folder in "Broker Portal" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -31,7 +47,7 @@
 		2C0BECDB2DB64DD6008AD6C4 /* Broker Portal */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				2C0BECEB2DB64DD8008AD6C4 /* Exceptions for "Broker Portal" folder in "Broker Portal" target */,
+				2CF1F0A62DBBBADC0054B00E /* Exceptions for "Broker Portal" folder in "Broker Portal" target */,
 			);
 			path = "Broker Portal";
 			sourceTree = "<group>";
@@ -43,7 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E2038FC0FBEEDAB39506965 /* Pods_Broker_Portal.framework in Frameworks */,
+				2CED9A752DB7AA5000433D72 /* Pods_Broker_Portal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +87,7 @@
 		51EC0A35F2E713E3D02A9C59 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2CED9A712DB7AA4A00433D72 /* FalconAPIFramework.framework */,
 				2DF01893BA6831EFC04483F3 /* Pods_Broker_Portal.framework */,
 			);
 			name = Frameworks;
@@ -96,6 +113,7 @@
 				2C0BECD52DB64DD6008AD6C4 /* Sources */,
 				2C0BECD62DB64DD6008AD6C4 /* Frameworks */,
 				2C0BECD72DB64DD6008AD6C4 /* Resources */,
+				2CED9A742DB7AA4A00433D72 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

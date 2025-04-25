@@ -41,3 +41,82 @@ public extension UIViewController {
     }
     
 }
+
+public extension UIViewController {
+    
+    //MARK: How to use
+    //        configureNavigationBar(title: "Abc",leftImage: UIImage(named: "Vector"), leftAction:  {
+    //            debugPrint("Tap")
+    //        })
+    
+    /// Configure navigation bar with customizable left and right buttons (memory-safe)
+    /// - Parameters:
+    ///   - title: Title to display in the navigation bar
+    ///   - leftTitle: Optional left button title
+    ///   - leftImage: Optional left button image
+    ///   - leftAction: Action closure for left button (default: pop)
+    ///   - rightTitle: Optional right button title
+    ///   - rightImage: Optional right button image
+    ///   - rightAction: Action closure for right button
+    func configureNavigationBar(
+        title: String? = nil,
+        leftTitle: String? = nil,
+        leftImage: UIImage? = nil,
+        leftAction: (() -> Void)? = nil,
+        rightTitle: String? = nil,
+        rightImage: UIImage? = nil,
+        rightAction: (() -> Void)? = nil
+    ) {
+        self.title = title
+        
+        // Left Button
+        if let leftAction = leftAction {
+            let action = UIAction { [weak self] _ in
+                guard self != nil else {return}
+                leftAction()
+            }
+            navigationItem.leftBarButtonItem = UIBarButtonItem(
+                title: leftTitle,
+                image: leftImage,
+                primaryAction: action,
+                menu: nil
+            )
+        } else if leftTitle != nil || leftImage != nil {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(
+                title: leftTitle,
+                style: .plain,
+                target: self,
+                action: #selector(defaultBackAction)
+            )
+            navigationItem.leftBarButtonItem?.image = leftImage
+        }
+        
+        // Right Button
+        if let rightAction = rightAction {
+            let action = UIAction { [weak self] _ in
+                guard self != nil else {return}
+                rightAction()
+            }
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: rightTitle,
+                image: rightImage,
+                primaryAction: action,
+                menu: nil
+            )
+        } else if rightTitle != nil || rightImage != nil {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: rightTitle,
+                style: .plain,
+                target: nil,
+                action: nil
+            )
+            navigationItem.rightBarButtonItem?.image = rightImage
+        }
+    }
+    
+    // MARK: - Default Back Button Fallback
+    
+    @objc private func defaultBackAction() {
+        navigationController?.popViewController(animated: true)
+    }
+}

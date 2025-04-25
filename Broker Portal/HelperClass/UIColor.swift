@@ -15,6 +15,14 @@ extension UIColor {
         return UIColor(named: "HeaderGreenColor") ?? UIColor()
     }
     
+    static var AppYellowColor: UIColor {
+        return UIColor(named: "AppYellowColor") ?? UIColor()
+    }
+    
+    static var AppLightGrey: UIColor {
+        return UIColor(named: "AppLightGrey") ?? UIColor()
+    }
+    
     static var LableSubTittleColor: UIColor {
         return UIColor(named: "LableSubTittleColor") ?? UIColor()
     }

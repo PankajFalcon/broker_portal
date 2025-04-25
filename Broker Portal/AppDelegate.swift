@@ -11,11 +11,18 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         UITextField.appearance().tintColor = .LableTittleColor
+        UITextView.appearance().tintColor = .LableTittleColor
+        
+        Task {
+            await APIManager.initializeShared()
+            print("✅ APIManager is ready")
+            // Now it's safe to use APIManager.shared.handleRequest()
+        }
+        
         return true
     }
 

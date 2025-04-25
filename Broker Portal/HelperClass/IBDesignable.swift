@@ -162,18 +162,17 @@ public extension UITextView {
     
     // MARK: - Associated Keys
     private struct AssociatedKeys {
-        static var placeholderLabel = "placeholderLabel"
-        static var placeholderText = "placeholderText"
-        static var placeholderColor = "placeholderColor"
-        static var padding = "padding"
+        static var placeholderLabel: UInt8 = 0
+        static var placeholderText: UInt8 = 1
+        static var placeholderColor: UInt8 = 2
     }
-
+    
     // MARK: - Placeholder Label
     private var placeholderLabel: UILabel {
-        if let label = objc_getAssociatedObject(self, &AssociatedKeys.placeholderLabel) as? UILabel {
+        if let label = objc_getAssociatedObject(self, UnsafeRawPointer(&AssociatedKeys.placeholderLabel)) as? UILabel {
             return label
         }
-
+        
         let label = UILabel()
         label.numberOfLines = 0
         label.font = self.font
@@ -181,39 +180,39 @@ public extension UITextView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = false
         addSubview(label)
-
-        objc_setAssociatedObject(self, &AssociatedKeys.placeholderLabel, label, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-
+        
+        objc_setAssociatedObject(self, UnsafeRawPointer(&AssociatedKeys.placeholderLabel), label, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         updatePlaceholderConstraints()
-
+        
         return label
     }
-
+    
     // MARK: - Placeholder Text
     @IBInspectable var placeholder: String {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKeys.placeholderText) as? String ?? ""
+            return objc_getAssociatedObject(self, UnsafeRawPointer(&AssociatedKeys.placeholderText)) as? String ?? ""
         }
         set {
-            objc_setAssociatedObject(self, &AssociatedKeys.placeholderText, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+            objc_setAssociatedObject(self, UnsafeRawPointer(&AssociatedKeys.placeholderText), newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
             placeholderLabel.text = newValue
             placeholderLabel.isHidden = !text.isEmpty
+            
             NotificationCenter.default.removeObserver(self, name: UITextView.textDidChangeNotification, object: self)
             NotificationCenter.default.addObserver(self, selector: #selector(textDidChange), name: UITextView.textDidChangeNotification, object: self)
         }
     }
-
+    
     // MARK: - Placeholder Color
     @IBInspectable var placeholderColor: UIColor {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKeys.placeholderColor) as? UIColor ?? .lightGray
+            return objc_getAssociatedObject(self, UnsafeRawPointer(&AssociatedKeys.placeholderColor)) as? UIColor ?? .lightGray
         }
         set {
-            objc_setAssociatedObject(self, &AssociatedKeys.placeholderColor, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, UnsafeRawPointer(&AssociatedKeys.placeholderColor), newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             placeholderLabel.textColor = newValue
         }
     }
-
+    
     // MARK: - Padding (textContainerInset)
     @IBInspectable var paddingTop: CGFloat {
         get { return textContainerInset.top }
@@ -222,7 +221,7 @@ public extension UITextView {
             updatePlaceholderConstraints()
         }
     }
-
+    
     @IBInspectable var paddingLeft: CGFloat {
         get { return textContainerInset.left }
         set {
@@ -230,7 +229,7 @@ public extension UITextView {
             updatePlaceholderConstraints()
         }
     }
-
+    
     @IBInspectable var paddingBottom: CGFloat {
         get { return textContainerInset.bottom }
         set {
@@ -238,7 +237,7 @@ public extension UITextView {
             updatePlaceholderConstraints()
         }
     }
-
+    
     @IBInspectable var paddingRight: CGFloat {
         get { return textContainerInset.right }
         set {
@@ -246,21 +245,21 @@ public extension UITextView {
             updatePlaceholderConstraints()
         }
     }
-
+    
     // MARK: - Placeholder Visibility
     @objc private func textDidChange() {
         placeholderLabel.isHidden = !text.isEmpty
     }
-
+    
     // MARK: - Update Placeholder Constraints
     private func updatePlaceholderConstraints() {
-        guard let label = objc_getAssociatedObject(self, &AssociatedKeys.placeholderLabel) as? UILabel else { return }
-
-        NSLayoutConstraint.deactivate(label.constraints)
-        label.removeConstraints(label.constraints)
+        guard let label = objc_getAssociatedObject(self, UnsafeRawPointer(&AssociatedKeys.placeholderLabel)) as? UILabel else { return }
+        
         label.removeFromSuperview()
         addSubview(label)
-
+        
+        NSLayoutConstraint.deactivate(label.constraints)
+        
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: self.topAnchor, constant: textContainerInset.top),
             label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: textContainerInset.left + textContainer.lineFragmentPadding),
@@ -269,4 +268,203 @@ public extension UITextView {
     }
 }
 
+//MARK: How to use
+//stepBar.setTitles(["Applicant Info", "Coverages", "Operations", "Drivers", "Vehicles", "Eligibility Questions", "Upload", "Submit"])
+//stepBar.setStep(2)
+//stepBar.onStepSelected = { index in
+//    print("Selected step:", index)
+//}
 
+//MARK: This Code For StepView
+@IBDesignable
+class ChevronStepView: UIView {
+    private let label = UILabel()
+    private let shapeLayer = CAShapeLayer()
+
+    var index: Int = 0
+    var tapHandler: ((Int) -> Void)?
+
+    @IBInspectable var title: String = "" {
+        didSet {
+            label.text = title
+            label.font = InterFontStyle.medium.with(size: 14)
+            label.textColor = .AppWhiteColor
+        }
+    }
+
+    var isCompleted: Bool = false {
+        didSet { updateStyle() }
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupView()
+    }
+
+    private func setupView() {
+        backgroundColor = .clear
+        layer.addSublayer(shapeLayer)
+
+        label.font = InterFontStyle.medium.with(size: 14)
+        label.textColor = .white
+        label.numberOfLines = 2
+        label.textAlignment = .center
+        label.lineBreakMode = .byWordWrapping
+
+        addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: topAnchor, constant: 6),
+            label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6),
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
+        ])
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(stepTapped))
+        addGestureRecognizer(tap)
+
+        updateStyle()
+    }
+
+    @objc private func stepTapped() {
+        tapHandler?(index)
+    }
+
+    private func updateStyle() {
+        shapeLayer.fillColor = isCompleted ? UIColor.AppYellowColor.cgColor : UIColor.AppLightGrey.cgColor
+        setNeedsLayout()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        shapeLayer.path = chevronPath(bounds: bounds).cgPath
+    }
+
+    private func chevronPath(bounds: CGRect) -> UIBezierPath {
+        let path = UIBezierPath()
+        let w = bounds.width + 10
+        let h = bounds.height
+        let cut: CGFloat = 12
+
+        path.move(to: CGPoint(x: 0, y: 0))
+        path.addLine(to: CGPoint(x: w - cut, y: 0))
+        path.addLine(to: CGPoint(x: w, y: h / 2))
+        path.addLine(to: CGPoint(x: w - cut, y: h))
+        path.addLine(to: CGPoint(x: 0, y: h))
+        path.addLine(to: CGPoint(x: cut, y: h / 2))
+        path.close()
+        return path
+    }
+}
+
+@IBDesignable
+class ChevronProgressBar: UIView {
+    private let scrollView = UIScrollView()
+    private let stackView = UIStackView()
+    private var stepViews: [ChevronStepView] = []
+
+    @IBInspectable var stepHeight: CGFloat = 40 {
+        didSet {
+            heightConstraint?.constant = stepHeight
+        }
+    }
+
+    var onStepSelected: ((Int) -> Void)?
+    private var heightConstraint: NSLayoutConstraint?
+
+    var steps: [String] = [] {
+        didSet { setupSteps() }
+    }
+
+    var currentStepIndex: Int = 0 {
+        didSet { updateProgress() }
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupScrollStack()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupScrollStack()
+    }
+
+    private func setupScrollStack() {
+        addSubview(scrollView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsHorizontalScrollIndicator = false
+
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
+
+        stackView.axis = .horizontal
+        stackView.spacing = 4
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+
+        scrollView.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        heightConstraint = stackView.heightAnchor.constraint(equalToConstant: stepHeight)
+
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            heightConstraint!
+        ])
+    }
+
+    private func setupSteps() {
+        stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        stepViews.removeAll()
+
+        for (i, title) in steps.enumerated() {
+            let view = ChevronStepView()
+            view.title = title
+            view.index = i
+            view.tapHandler = { [weak self] index in
+                self?.setStep(index)
+            }
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive = true
+            stepViews.append(view)
+            stackView.addArrangedSubview(view)
+        }
+
+        updateProgress()
+    }
+
+    private func updateProgress() {
+        for (index, step) in stepViews.enumerated() {
+            step.isCompleted = index <= currentStepIndex
+        }
+
+        if currentStepIndex < stepViews.count {
+            let stepView = stepViews[currentStepIndex]
+            scrollView.scrollRectToVisible(stepView.frame.insetBy(dx: -8, dy: 0), animated: true)
+        }
+    }
+
+    // MARK: - External Access
+
+    func setStep(_ index: Int) {
+        guard index >= 0 && index < stepViews.count else { return }
+        currentStepIndex = index
+        onStepSelected?(index)
+    }
+
+    func setTitles(_ titles: [String]) {
+        self.steps = titles
+    }
+}

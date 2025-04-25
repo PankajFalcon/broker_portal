@@ -25,7 +25,7 @@ public extension UIViewController {
         func instantiateVC<T: UIViewController>() -> T {
             let identifier = String(describing: self)
             return storyboard.instance.instantiateViewController(withIdentifier: identifier) as! T
-            }
+        }
         return instantiateVC()
     }
 }
