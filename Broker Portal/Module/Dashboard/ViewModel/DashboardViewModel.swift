@@ -43,7 +43,8 @@ class DashboardViewModel{
     func getRecentActivity() async throws -> RecentActivityModel? {
         guard let url = APIConstants.recentActivity else { return nil }
         
-        let model = await DashboardRequestModel.createModel()
+        var model = await DashboardRequestModel.createModel()
+        model.insured_name = self.model?.insured_name ?? ""
         
         let response: RecentActivityModel = try await APIManagerHelper.shared.handleRequest(
             .postRequest(url: url, body: try model.toDictionaryExcludingEmptyStrings().data(), headers: [:]),
@@ -62,7 +63,8 @@ class DashboardViewModel{
     func getPolicy() async throws -> RecentActivityModel? {
         guard let url = APIConstants.getPolicy else { return nil }
         
-        let model = await DashboardRequestModel.createModel()
+        var model = await DashboardRequestModel.createModel()
+        model.insured_name = self.model?.insured_name ?? ""
         
         let response: RecentActivityModel = try await APIManagerHelper.shared.handleRequest(
             .postRequest(url: url, body: try model.toDictionaryExcludingEmptyStrings().data(), headers: [:]),

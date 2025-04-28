@@ -24,6 +24,21 @@ enum AppTitle:String{
 
 public extension UIViewController {
     
+    /// Instantiate a view controller from a storyboard.
+        /// - Parameters:
+        ///   - storyboardName: The name of the storyboard file.
+        ///   - identifier: The view controller's storyboard ID. If nil, the class name will be used.
+        /// - Returns: An instantiated view controller of the expected type.
+    static func instantiate<T: UIViewController>(fromStoryboard storyboardName: AppStoryboard, identifier: String? = nil) -> T {
+        let storyboard = UIStoryboard(name: storyboardName.rawValue, bundle: nil)
+            let id = identifier ?? String(describing: T.self)
+            
+            guard let viewController = storyboard.instantiateViewController(withIdentifier: id) as? T else {
+                fatalError("❌ ViewController with identifier \(id) not found in \(storyboardName) storyboard.")
+            }
+            return viewController
+        }
+    
     /// Push a view controller from storyboard onto the current navigation stack
     func push<T: UIViewController>(_ type: T.Type, from storyboard: AppStoryboard, setup: ((T) -> Void)? = nil) {
         let vc = T.instantiate(from: storyboard)

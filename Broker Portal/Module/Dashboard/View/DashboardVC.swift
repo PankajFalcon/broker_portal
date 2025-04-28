@@ -10,6 +10,7 @@ import UIKit
 class DashboardVC: UIViewController {
     
     // MARK: - Outlets
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var txtSearch: UITextField!
     @IBOutlet weak var btnPolicy: UIButton!
     @IBOutlet weak var btnActivity: UIButton!
@@ -18,6 +19,8 @@ class DashboardVC: UIViewController {
     private var viewModel: DashboardViewModel?
     private let debouncer = Debouncer(delay: 0.5) // 0.5 seconds delay
     private var isActivity : Bool?
+    
+    var responseModel : [RecentActivityRecord]?
     
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
@@ -39,6 +42,32 @@ class DashboardVC: UIViewController {
         // Initial button setup
         setupButtonStates(isActivitySelected: true)
         
+        setupTableView()
+    }
+    
+    private func setupTableView(){
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.tableFooterView = UIView()
+        tableView.showsHorizontalScrollIndicator = false
+        tableView.showsVerticalScrollIndicator = false
+        tableView.register(cellType: ActivityAndPolicyXIB.self)
+        tableView.addRefreshControl {
+            self.refreshData()
+        }
+    }
+    
+    private func refreshData() {
+        // Your API call or logic
+        view.endEditing(true)
+        if isActivity == true{
+            fetchActivities()
+        }else{
+            fetchPolicy()
+        }
+        
+        // Once done:
+        tableView.endRefreshing()
     }
     
     private func setupSearchTextField() {
@@ -58,6 +87,8 @@ class DashboardVC: UIViewController {
     private func performSearch(with query: String) {
         // Your API call or local search logic here
         print("Searching for: \(query)")
+        view.endEditing(true)
+        responseModel?.removeAll()
         if isActivity == true{
             fetchActivities()
         }else{
@@ -105,7 +136,8 @@ class DashboardVC: UIViewController {
             viewModel.model?.insured_name = txtSearch.trim()
             do {
                 let response = try await viewModel.getRecentActivity()
-                debugPrint(response?.data?.records?.first?.submissionId ?? 0)
+                responseModel = response?.data?.records
+                self.tableView.refresh()
             } catch {
                 // Handle error (e.g., show an alert)
                 debugPrint("Failed to fetch activities: \(error.localizedDescription)")
@@ -125,11 +157,27 @@ class DashboardVC: UIViewController {
             
             do {
                 let response = try await viewModel.getPolicy()
-                debugPrint(response?.data?.records?.first?.submissionId ?? 0)
+                responseModel = response?.data?.records
+                self.tableView.refresh()
             } catch {
                 // Handle error (e.g., show an alert)
                 debugPrint("Failed to fetch policy: \(error.localizedDescription)")
             }
         }
     }
+}
+
+extension DashboardVC:UITableViewDelegate,UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return responseModel?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: ActivityAndPolicyXIB = tableView.dequeueReusableCell(for: indexPath)
+        if let indexData = responseModel?[indexPath.row] {
+            cell.setupValue(value: indexData)
+        }
+        return cell
+    }
+    
 }

@@ -21,7 +21,11 @@ class ActivityAndPolicyXIB: UITableViewCell {
     }
     
     func setupValue(value:RecentActivityRecord){
-        
+        lblStatus.text = value.status ?? ""
+        lblPremium.text = value.premium ?? ""
+        lblQuoteNo.text = "\(value.quoteId ?? 0)"
+        lblCompanyName.text = value.insuredName ?? ""
+        lblDate.text = value.submitDate ?? ""
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

@@ -333,13 +333,15 @@ public actor APIManager {
         
         let refreshURL = URL(string: "https://futuristic-policy.dev.falconsystem.com/ams-v1/adminop/get-refresh-token")!
         var request = URLRequest(url: refreshURL)
-        request.httpMethod = "POST"
+        request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(refreshToken)", forHTTPHeaderField: "Authorization")
         
         let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw APIError.authenticationFailed
+            AuthHandler.shared.handleUnauthorized()
+            await ToastManager.shared.showToast(message: APIError.authenticationFailed.errorMessage)
+            return
         }
         
         // Parse new token
