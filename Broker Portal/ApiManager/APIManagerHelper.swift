@@ -7,11 +7,11 @@
 
 import Foundation
 
-public class APIManagerHelper {
+public class APIManagerHelper : @unchecked Sendable{
     
     public static let shared = APIManagerHelper()
     private let loaderManager = LoaderManager()
-
+    
     private init() {} // Private constructor to enforce singleton pattern
     
     /// Generic function to handle API requests and decode response into a Codable model
@@ -22,11 +22,16 @@ public class APIManagerHelper {
     ) async throws -> T {
         loaderManager.showLoadingWithDelay()
         let data = try await APIManager.shared.handleRequest(request, progress: progress)
-        do {
+        // After 1 second (API returns fast)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [self] in
             loaderManager.hideLoading()
+        }
+        do {
+            //            loaderManager.hideLoading()
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
-            loaderManager.hideLoading()
+            //            loaderManager.hideLoading()
             throw APIError.decodingError("Failed to decode response into \(T.self): \(error.localizedDescription)")
         }
     }

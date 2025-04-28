@@ -19,16 +19,15 @@ class LoginVC: UIViewController {
     
     // MARK: - Properties
     
-    private var viewModel: LoginViewModel!
+    private var viewModel: LoginViewModel?
     
     // MARK: - Lifecycle Methods
     
     @IBOutlet weak var stepBar: ChevronProgressBar!
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupView()
         viewModel = LoginViewModel(view: self)
         
@@ -38,7 +37,7 @@ class LoginVC: UIViewController {
     
     private func setupView() {
         txtEmail.text = "ashishverma@falconsystem.com"
-        txtPassword.text = "Test@1234s"
+        txtPassword.text = "Test@1234"
         txtEmail.font = InterFontStyle.medium.with(size: 14)
         txtPassword.font = InterFontStyle.medium.with(size: 14)
     }
@@ -47,7 +46,7 @@ class LoginVC: UIViewController {
     
     @IBAction private func loginOnPress(_ sender: UIButton) {
         guard validateInputs() else { return }
-        viewModel.loginApiCall()
+        viewModel?.loginApiCall()
     }
     
     // MARK: - Validation

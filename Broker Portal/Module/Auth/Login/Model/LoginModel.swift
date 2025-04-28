@@ -42,7 +42,7 @@ struct LoginModel: Codable {
             return model
         }
     }
-
+    
 }
 
 struct ApplicationProfile: Codable {

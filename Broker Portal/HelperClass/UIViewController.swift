@@ -18,6 +18,10 @@ import UIKit
 //    vc.isDarkModeEnabled = true
 //}
 
+enum AppTitle:String{
+    case Dashboard = "Dashboard"
+}
+
 public extension UIViewController {
     
     /// Push a view controller from storyboard onto the current navigation stack
@@ -31,6 +35,10 @@ public extension UIViewController {
         }
         
         navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func popView(){
+        navigationController?.popViewController(animated: true)
     }
     
     /// Present a view controller from storyboard onto the current navigation stack
@@ -58,6 +66,7 @@ public extension UIViewController {
     ///   - rightTitle: Optional right button title
     ///   - rightImage: Optional right button image
     ///   - rightAction: Action closure for right button
+    
     func configureNavigationBar(
         title: String? = nil,
         leftTitle: String? = nil,

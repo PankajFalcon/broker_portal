@@ -16,11 +16,12 @@ enum APIConstants{
     
     static let baseURL = "https://futuristic-policy.dev.falconsystem.com"
     static let version = "/ams-v1"
-    static let module  = "/adminop/"
     
-    static var userlogin: URL? { url("userlogin") }
+    static var userlogin: URL? { url("/adminop/userlogin") }
+    static var recentActivity: URL? { url("/quoteop/get_quotes_for_broker_recent_activity") }
+    static var getPolicy: URL? { url("/quoteop/get-all-policy-data-paginated") }
     
     private static func url(_ path: String) -> URL? {
-        URL(string: baseURL + version + module + path)
+        URL(string: baseURL + version + path)
     }
 }

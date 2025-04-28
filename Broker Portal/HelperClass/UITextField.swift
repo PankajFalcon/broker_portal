@@ -12,6 +12,10 @@ private var errorLabelKey: UInt8 = 0
 
 public extension UITextField {
     
+    func trim() -> String{
+        return self.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    }
+    
     func showError(message: String,
                    font: UIFont = .appRegular(12,true),
                    textColor: UIColor = .red,

@@ -11,28 +11,30 @@ class LoaderManager {
     
     private weak var loaderView: UIView?
     private weak var activityIndicator: UIActivityIndicatorView?
-    private var timeoutTask: Task<Void, Never>? // Task to delay loader display
+    private var timeoutTask: Task<Void, Never>?
     private var isLoaderVisible = false
     
     init() {}
     
-    // Starts a delay, shows loader only if API call exceeds 2 seconds
     func showLoadingWithDelay() {
         // Cancel previous task if any
         timeoutTask?.cancel()
         
-        // Start a new delay task
         timeoutTask = Task { [weak self] in
             do {
-                try await Task.sleep(nanoseconds: 2 * 1_000_000_000) // Wait 2 seconds
-                await self?.showLoader() // Only show loader if still waiting
+                try await Task.sleep(nanoseconds: 0 * 1_000_000_000) // Wait 2 seconds
+                
+                // Check if task is cancelled after sleeping
+                try Task.checkCancellation()
+                
+                await self?.showLoader()
+                
             } catch {
-                // Ignore cancellation error
+                // Task was cancelled, no loader will be shown
             }
         }
     }
     
-    // Immediately shows the loader
     @MainActor
     private func showLoader() {
         guard !isLoaderVisible else { return }
@@ -57,7 +59,6 @@ class LoaderManager {
         self.activityIndicator = activityIndicator
     }
     
-    // Cancels the delay and hides the loader
     func hideLoading() {
         timeoutTask?.cancel()
         timeoutTask = nil

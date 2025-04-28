@@ -30,6 +30,7 @@ class LoginViewModel {
                 )
                 if response.status != 0 {
                     await UserDefaultsManager.shared.set(response, forKey: UserDefaultsKey.LoginResponse)
+                    await self.view?.push(DashboardVC.self, from: .dashboard)
                 } else {
                     await ToastManager.shared.showToast(message: response.message ?? "")
                 }

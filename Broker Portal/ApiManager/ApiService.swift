@@ -225,6 +225,8 @@ public actor APIManager {
         
         var request = URLRequest(url: url)
         request.cachePolicy = .reloadIgnoringLocalCacheData
+        request.setValue("Bearer \(await UserDefaultsManager.shared.get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?.accessToken ?? "")", forHTTPHeaderField: "Authorization")
+        
         setHeaders(request: &request, headers: headers)
         
         let (data, response) = try await session.data(for: request)
@@ -244,8 +246,11 @@ public actor APIManager {
             request.httpMethod = method.rawValue
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = body
+            request.setValue("Bearer \(await UserDefaultsManager.shared.get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?.accessToken ?? "")", forHTTPHeaderField: "Authorization")
+            
             setHeaders(request: &request, headers: headers)
             
+            debugPrint("Api Header : \(request)")
             let (data, response) = try await session.data(for: request)
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw APIError.invalidResponse
@@ -277,6 +282,8 @@ public actor APIManager {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(await UserDefaultsManager.shared.get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?.accessToken ?? "")", forHTTPHeaderField: "Authorization")
+        
         setHeaders(request: &request, headers: headers)
         
         return try await withCheckedThrowingContinuation { continuation in
@@ -324,13 +331,11 @@ public actor APIManager {
             throw APIError.authenticationFailed
         }
         
-        let refreshURL = URL(string: "https://yourapi.com/auth/refresh")!
+        let refreshURL = URL(string: "https://futuristic-policy.dev.falconsystem.com/ams-v1/adminop/get-refresh-token")!
         var request = URLRequest(url: refreshURL)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let body = ["refresh_token": refreshToken]
-        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        request.setValue("Bearer \(refreshToken)", forHTTPHeaderField: "Authorization")
         
         let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
@@ -339,12 +344,10 @@ public actor APIManager {
         
         // Parse new token
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        let newAccessToken = json?["access_token"] as? String
-        let newRefreshToken = json?["refresh_token"] as? String
+        let newAccessToken = json?["access_token"] as? String ?? ""
+        //        let newRefreshToken = json?["refresh_token"] as? String
         
-        //        TokenStorage.shared.accessToken = newAccessToken
-        //        TokenStorage.shared.refreshToken = newRefreshToken
-        await self.updateUserDefaultModel(accessToken:"",refreshToken:"")
+        await self.updateUserDefaultModel(accessToken:newAccessToken,refreshToken:"")
     }
     
     func updateUserDefaultModel(accessToken:String,refreshToken:String) async {
