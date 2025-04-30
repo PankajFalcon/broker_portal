@@ -12,27 +12,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let window = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        self.window = UIWindow(windowScene: window)
-        Task{
-            await self.setRoot()
+        let newWindow = UIWindow(windowScene: windowScene)
+        self.window = newWindow
+        
+        Task { @MainActor in
+            await setRoot()
         }
     }
     
-    func setRoot() async{
-        // Assuming you're in SceneDelegate.swift
-        if let window = self.window {
-            // Instantiate the view controller
-            let token = await UserDefaultsManager.shared.get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?.accessToken?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            if token.isEmpty{
-                window.setRootViewController(LoginVC.self, from: .main)
-            }else{
-                window.setRootViewController(DashboardVC.self, from: .dashboard)
-            }
+    private func createSideMenu(rootVC: UIViewController) {
+        let menuVC : MenuViewController = MenuViewController.instantiate(fromStoryboard: .main, identifier: "MenuViewController")
+        
+        guard let window = self.window else { return }
+        
+        SideMenuManager.shared.setup(menu: menuVC, root: rootVC, in: window)
+    }
+    
+    private func setRoot() async {
+        let token = await UserDefaultsManager.shared
+            .get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?
+            .accessToken?
+            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        
+        if token.isEmpty {
+            window?.setRootViewController(LoginVC.self, from: .main)
+        } else {
+            let dashboardVC = DashboardVC.instantiate(fromStoryboard: .dashboard, identifier: "DashboardVC")
+            createSideMenu(rootVC: dashboardVC)
         }
     }
     

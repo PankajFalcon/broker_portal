@@ -18,98 +18,127 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ActivityAndPolicyXIB" rowHeight="216" id="KGk-i7-Jjw" customClass="ActivityAndPolicyXIB" customModule="Broker_Portal" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="474" height="216"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ActivityAndPolicyXIB" rowHeight="273" id="KGk-i7-Jjw" customClass="ActivityAndPolicyXIB" customModule="Broker_Portal" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="476" height="273"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="474" height="216"/>
+                <rect key="frame" x="0.0" y="0.0" width="476" height="273"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Company Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g3M-Te-85M">
-                        <rect key="frame" x="10" y="10" width="105.66666666666667" height="17"/>
-                        <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
-                        <color key="textColor" name="LableSubTittleColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Company Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3W-PK-1BS">
-                        <rect key="frame" x="10.000000000000007" y="31" width="121.66666666666669" height="19.333333333333329"/>
-                        <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
-                        <color key="textColor" name="LableTittleColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kSx-my-OKI">
-                        <rect key="frame" x="421" y="10" width="43" height="17"/>
-                        <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
-                        <color key="textColor" name="LableSubTittleColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Started" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vZo-VE-jsg">
-                        <rect key="frame" x="406" y="31" width="58" height="20"/>
-                        <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
-                        <color key="textColor" name="LableTittleColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Quote No." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XR1-XA-wYu">
-                        <rect key="frame" x="10" y="56.333333333333343" width="67" height="17"/>
-                        <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
-                        <color key="textColor" name="LableSubTittleColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="1058894" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VWh-WB-gaR">
-                        <rect key="frame" x="10" y="77.333333333333343" width="68.666666666666671" height="19.333333333333329"/>
-                        <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
-                        <color key="textColor" name="LableTittleColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Effective Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rYC-qY-46N">
-                        <rect key="frame" x="10" y="102.66666666666667" width="94" height="17"/>
-                        <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
-                        <color key="textColor" name="LableSubTittleColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="04/25/2025" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0F0-cj-zd9">
-                        <rect key="frame" x="10" y="123.66666666666669" width="92.333333333333329" height="19.333333333333314"/>
-                        <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
-                        <color key="textColor" name="LableTittleColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Premium" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vi9-iI-lve">
-                        <rect key="frame" x="10" y="149" width="58" height="17"/>
-                        <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
-                        <color key="textColor" name="LableSubTittleColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="04/25/2025" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9bp-8j-tqj">
-                        <rect key="frame" x="10" y="170" width="92.333333333333329" height="19.333333333333343"/>
-                        <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
-                        <color key="textColor" name="LableTittleColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <view clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zb9-Hp-zfp">
+                        <rect key="frame" x="20" y="10" width="436" height="253"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Company Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g3M-Te-85M">
+                                <rect key="frame" x="10" y="10" width="105.66666666666667" height="17"/>
+                                <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
+                                <color key="textColor" name="LableSubTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Company Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3W-PK-1BS">
+                                <rect key="frame" x="10.000000000000007" y="31" width="121.66666666666669" height="19.333333333333329"/>
+                                <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
+                                <color key="textColor" name="LableTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kSx-my-OKI">
+                                <rect key="frame" x="383" y="10" width="43" height="17"/>
+                                <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
+                                <color key="textColor" name="LableSubTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Started" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vZo-VE-jsg">
+                                <rect key="frame" x="368" y="31" width="58" height="20"/>
+                                <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
+                                <color key="textColor" name="LableTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Quote No." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XR1-XA-wYu">
+                                <rect key="frame" x="10" y="56.333333333333329" width="67" height="17"/>
+                                <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
+                                <color key="textColor" name="LableSubTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="1058894" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VWh-WB-gaR">
+                                <rect key="frame" x="10" y="77.333333333333343" width="68.666666666666671" height="19.333333333333329"/>
+                                <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
+                                <color key="textColor" name="LableTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Effective Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rYC-qY-46N">
+                                <rect key="frame" x="10" y="102.66666666666667" width="94" height="17"/>
+                                <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
+                                <color key="textColor" name="LableSubTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="04/25/2025" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0F0-cj-zd9">
+                                <rect key="frame" x="10" y="123.66666666666663" width="92.333333333333329" height="19.333333333333371"/>
+                                <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
+                                <color key="textColor" name="LableTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Premium" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vi9-iI-lve">
+                                <rect key="frame" x="10" y="149" width="58" height="17"/>
+                                <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
+                                <color key="textColor" name="LableSubTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="04/25/2025" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9bp-8j-tqj">
+                                <rect key="frame" x="10" y="170" width="92.333333333333329" height="19.333333333333343"/>
+                                <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
+                                <color key="textColor" name="LableTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" name="AppWhiteColor"/>
+                        <constraints>
+                            <constraint firstItem="g3M-Te-85M" firstAttribute="leading" secondItem="zb9-Hp-zfp" secondAttribute="leading" constant="10" id="24V-ik-h6Q"/>
+                            <constraint firstItem="0F0-cj-zd9" firstAttribute="top" secondItem="rYC-qY-46N" secondAttribute="bottom" constant="4" id="7Jk-zy-gGL"/>
+                            <constraint firstItem="kSx-my-OKI" firstAttribute="top" secondItem="zb9-Hp-zfp" secondAttribute="top" constant="10" id="CIz-wh-BIg"/>
+                            <constraint firstItem="vZo-VE-jsg" firstAttribute="top" secondItem="kSx-my-OKI" secondAttribute="bottom" constant="4" id="M6I-aD-kJW"/>
+                            <constraint firstItem="A3W-PK-1BS" firstAttribute="leading" secondItem="zb9-Hp-zfp" secondAttribute="leading" constant="10" id="PS9-Ef-LeM"/>
+                            <constraint firstItem="A3W-PK-1BS" firstAttribute="top" secondItem="g3M-Te-85M" secondAttribute="bottom" constant="4" id="QIO-84-V6M"/>
+                            <constraint firstItem="rYC-qY-46N" firstAttribute="leading" secondItem="zb9-Hp-zfp" secondAttribute="leading" constant="10" id="QjC-h9-bhB"/>
+                            <constraint firstItem="XR1-XA-wYu" firstAttribute="top" secondItem="A3W-PK-1BS" secondAttribute="bottom" constant="6" id="RFu-Ps-yOB"/>
+                            <constraint firstAttribute="bottom" secondItem="9bp-8j-tqj" secondAttribute="bottom" constant="10" id="RmT-Mn-v9w"/>
+                            <constraint firstItem="vi9-iI-lve" firstAttribute="leading" secondItem="zb9-Hp-zfp" secondAttribute="leading" constant="10" id="YHI-KC-ei6"/>
+                            <constraint firstItem="vZo-VE-jsg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="A3W-PK-1BS" secondAttribute="trailing" constant="10" id="bBX-E5-Lfy"/>
+                            <constraint firstAttribute="trailing" secondItem="vZo-VE-jsg" secondAttribute="trailing" constant="10" id="dBm-H8-afk"/>
+                            <constraint firstAttribute="trailing" secondItem="kSx-my-OKI" secondAttribute="trailing" constant="10" id="eBl-jh-mG8"/>
+                            <constraint firstItem="vi9-iI-lve" firstAttribute="top" secondItem="0F0-cj-zd9" secondAttribute="bottom" constant="6" id="frp-SJ-eBQ"/>
+                            <constraint firstItem="0F0-cj-zd9" firstAttribute="leading" secondItem="rYC-qY-46N" secondAttribute="leading" id="iJY-Tn-OcG"/>
+                            <constraint firstItem="rYC-qY-46N" firstAttribute="top" secondItem="VWh-WB-gaR" secondAttribute="bottom" constant="6" id="jeU-9I-ccp"/>
+                            <constraint firstItem="g3M-Te-85M" firstAttribute="top" secondItem="zb9-Hp-zfp" secondAttribute="top" constant="10" id="mu5-eU-RU4"/>
+                            <constraint firstItem="VWh-WB-gaR" firstAttribute="top" secondItem="XR1-XA-wYu" secondAttribute="bottom" constant="4" id="ogw-9a-SFG"/>
+                            <constraint firstItem="9bp-8j-tqj" firstAttribute="top" secondItem="vi9-iI-lve" secondAttribute="bottom" constant="4" id="pQX-WB-WpR"/>
+                            <constraint firstItem="XR1-XA-wYu" firstAttribute="leading" secondItem="zb9-Hp-zfp" secondAttribute="leading" constant="10" id="rrc-zm-A6V"/>
+                            <constraint firstItem="9bp-8j-tqj" firstAttribute="leading" secondItem="vi9-iI-lve" secondAttribute="leading" id="x95-PD-pbs"/>
+                            <constraint firstItem="VWh-WB-gaR" firstAttribute="leading" secondItem="zb9-Hp-zfp" secondAttribute="leading" constant="10" id="ypM-Dm-7NI"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="14"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                <color key="value" name="LableTittleColor"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                                <real key="value" value="0.5"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
+                                <size key="value" width="0.0" height="0.0"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                                <real key="value" value="5"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
                 </subviews>
                 <color key="backgroundColor" name="AppWhiteColor"/>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="kSx-my-OKI" secondAttribute="trailing" constant="10" id="0z2-aS-JyH"/>
-                    <constraint firstItem="A3W-PK-1BS" firstAttribute="top" secondItem="g3M-Te-85M" secondAttribute="bottom" constant="4" id="58r-Vq-lgP"/>
-                    <constraint firstItem="XR1-XA-wYu" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="CBX-L8-Ai6"/>
-                    <constraint firstItem="A3W-PK-1BS" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="CgE-KM-JSR"/>
-                    <constraint firstItem="rYC-qY-46N" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="Em3-0J-Uq8"/>
-                    <constraint firstItem="vZo-VE-jsg" firstAttribute="top" secondItem="kSx-my-OKI" secondAttribute="bottom" constant="4" id="GZJ-sG-xy6"/>
-                    <constraint firstItem="9bp-8j-tqj" firstAttribute="leading" secondItem="vi9-iI-lve" secondAttribute="leading" id="QfW-Qu-MnR"/>
-                    <constraint firstItem="vi9-iI-lve" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="Tt1-v6-FeA"/>
-                    <constraint firstItem="0F0-cj-zd9" firstAttribute="top" secondItem="rYC-qY-46N" secondAttribute="bottom" constant="4" id="at9-hr-mnI"/>
-                    <constraint firstItem="VWh-WB-gaR" firstAttribute="top" secondItem="XR1-XA-wYu" secondAttribute="bottom" constant="4" id="bIK-PF-2Y2"/>
-                    <constraint firstItem="g3M-Te-85M" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="cgI-iW-djb"/>
-                    <constraint firstItem="XR1-XA-wYu" firstAttribute="top" secondItem="A3W-PK-1BS" secondAttribute="bottom" constant="6" id="dkx-Qx-WDA"/>
-                    <constraint firstAttribute="bottom" secondItem="9bp-8j-tqj" secondAttribute="bottom" constant="10" id="eco-Z1-YxJ"/>
-                    <constraint firstItem="rYC-qY-46N" firstAttribute="top" secondItem="VWh-WB-gaR" secondAttribute="bottom" constant="6" id="edj-n6-6HJ"/>
-                    <constraint firstItem="g3M-Te-85M" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="gZW-tX-llc"/>
-                    <constraint firstItem="9bp-8j-tqj" firstAttribute="top" secondItem="vi9-iI-lve" secondAttribute="bottom" constant="4" id="hDc-1r-pd1"/>
-                    <constraint firstItem="vi9-iI-lve" firstAttribute="top" secondItem="0F0-cj-zd9" secondAttribute="bottom" constant="6" id="myg-ug-q9z"/>
-                    <constraint firstItem="VWh-WB-gaR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="oc6-OJ-LFY"/>
-                    <constraint firstAttribute="trailing" secondItem="vZo-VE-jsg" secondAttribute="trailing" constant="10" id="rIe-mM-wE0"/>
-                    <constraint firstItem="kSx-my-OKI" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="ra2-JD-6UI"/>
-                    <constraint firstItem="0F0-cj-zd9" firstAttribute="leading" secondItem="rYC-qY-46N" secondAttribute="leading" id="uNo-Y0-QtY"/>
-                    <constraint firstItem="vZo-VE-jsg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="A3W-PK-1BS" secondAttribute="trailing" constant="10" id="ykP-wu-z4w"/>
+                    <constraint firstAttribute="bottom" secondItem="zb9-Hp-zfp" secondAttribute="bottom" constant="10" id="G9l-KP-t4E"/>
+                    <constraint firstItem="zb9-Hp-zfp" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="UK6-pY-Lco"/>
+                    <constraint firstAttribute="trailing" secondItem="zb9-Hp-zfp" secondAttribute="trailing" constant="20" id="hvI-CW-HGf"/>
+                    <constraint firstItem="zb9-Hp-zfp" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="zGA-aI-1Io"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -120,7 +149,7 @@
                 <outlet property="lblQuoteNo" destination="VWh-WB-gaR" id="pdm-FE-IzR"/>
                 <outlet property="lblStatus" destination="vZo-VE-jsg" id="wtp-GE-z2D"/>
             </connections>
-            <point key="canvasLocation" x="247.32824427480915" y="48.591549295774648"/>
+            <point key="canvasLocation" x="248.85496183206106" y="68.661971830985919"/>
         </tableViewCell>
     </objects>
     <resources>

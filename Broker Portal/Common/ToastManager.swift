@@ -16,7 +16,7 @@ actor ToastManager {
     func showToast(
         message: String,
         duration: TimeInterval = 2.0,
-        font: UIFont = InterFontStyle.semiBold.with(size: 14),
+        font: UIFont = InterFontStyle.bold.with(size: 14),
         backgroundColor: UIColor = UIColor.HeaderGreenColor,
         textColor: UIColor = .AppWhiteColor
     ) async {
@@ -41,7 +41,7 @@ actor ToastManager {
             toastLabel.textAlignment = .center
             toastLabel.alpha = 0.0
             toastLabel.numberOfLines = 0
-            toastLabel.layer.cornerRadius = 10
+            toastLabel.layer.cornerRadius = 8
             toastLabel.clipsToBounds = true
             toastLabel.translatesAutoresizingMaskIntoConstraints = false
             
@@ -76,7 +76,7 @@ actor ToastManager {
 }
 
 class PaddingLabel: UILabel {
-    var padding = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+    var padding = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
     
     override func drawText(in rect: CGRect) {
         super.drawText(in: rect.inset(by: padding))

@@ -65,7 +65,7 @@ public extension UIViewController {
     
 }
 
-public extension UIViewController {
+ extension UIViewController {
     
     //MARK: How to use
     //        configureNavigationBar(title: "Abc",leftImage: UIImage(named: "Vector"), leftAction:  {
@@ -85,10 +85,10 @@ public extension UIViewController {
     func configureNavigationBar(
         title: String? = nil,
         leftTitle: String? = nil,
-        leftImage: UIImage? = nil,
+        leftImage: Icon? = nil,
         leftAction: (() -> Void)? = nil,
         rightTitle: String? = nil,
-        rightImage: UIImage? = nil,
+        rightImage: Icon? = nil,
         rightAction: (() -> Void)? = nil
     ) {
         self.title = title
@@ -101,7 +101,7 @@ public extension UIViewController {
             }
             navigationItem.leftBarButtonItem = UIBarButtonItem(
                 title: leftTitle,
-                image: leftImage,
+                image: leftImage?.image,
                 primaryAction: action,
                 menu: nil
             )
@@ -112,7 +112,7 @@ public extension UIViewController {
                 target: self,
                 action: #selector(defaultBackAction)
             )
-            navigationItem.leftBarButtonItem?.image = leftImage
+            navigationItem.leftBarButtonItem?.image = leftImage?.image
         }
         
         // Right Button
@@ -123,7 +123,7 @@ public extension UIViewController {
             }
             navigationItem.rightBarButtonItem = UIBarButtonItem(
                 title: rightTitle,
-                image: rightImage,
+                image: rightImage?.image,
                 primaryAction: action,
                 menu: nil
             )
@@ -134,7 +134,7 @@ public extension UIViewController {
                 target: nil,
                 action: nil
             )
-            navigationItem.rightBarButtonItem?.image = rightImage
+            navigationItem.rightBarButtonItem?.image = rightImage?.image
         }
     }
     

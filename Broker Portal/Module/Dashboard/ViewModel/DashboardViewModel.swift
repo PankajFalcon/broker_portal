@@ -11,6 +11,7 @@ class DashboardViewModel{
     
     weak var view : DashboardVC?
     var model : DashboardRequestModel?
+    var isLoading : Bool?
     
     init(view: DashboardVC? = nil) {
         self.view = view
@@ -45,6 +46,8 @@ class DashboardViewModel{
         
         var model = await DashboardRequestModel.createModel()
         model.insured_name = self.model?.insured_name ?? ""
+        model.page = self.model?.page ?? 0
+        model.limit = self.model?.limit ?? 0
         
         let response: RecentActivityModel = try await APIManagerHelper.shared.handleRequest(
             .postRequest(url: url, body: try model.toDictionaryExcludingEmptyStrings().data(), headers: [:]),
@@ -62,21 +65,23 @@ class DashboardViewModel{
     
     func getPolicy() async throws -> RecentActivityModel? {
         guard let url = APIConstants.getPolicy else { return nil }
-        
+
         var model = await DashboardRequestModel.createModel()
         model.insured_name = self.model?.insured_name ?? ""
-        
+        model.page = self.model?.page ?? 0
+        model.limit = self.model?.limit ?? 0
+
         let response: RecentActivityModel = try await APIManagerHelper.shared.handleRequest(
             .postRequest(url: url, body: try model.toDictionaryExcludingEmptyStrings().data(), headers: [:]),
             responseType: RecentActivityModel.self
         )
-        
+
         if response.status != 0 {
-            return response // return the response on success
+            return response
         } else {
             await ToastManager.shared.showToast(message: response.message ?? "Unknown error")
-            return nil // or throw an error if needed
+            return nil
         }
     }
-    
+
 }

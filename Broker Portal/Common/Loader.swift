@@ -46,30 +46,48 @@ class LoaderManager {
         }
         
         let loaderBackgroundView = UIView(frame: window.bounds)
-        loaderBackgroundView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        loaderBackgroundView.backgroundColor = UIColor.clear // Start transparent
         
         let activityIndicator = UIActivityIndicatorView(style: .large)
         activityIndicator.center = loaderBackgroundView.center
-        activityIndicator.startAnimating()
-        
+        activityIndicator.alpha = 0
         loaderBackgroundView.addSubview(activityIndicator)
+        
         window.addSubview(loaderBackgroundView)
+        
+        // Animate the background fade and indicator appearance
+        UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseOut]) {
+            loaderBackgroundView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+            activityIndicator.alpha = 1
+        } completion: { _ in
+            activityIndicator.startAnimating()
+        }
         
         self.loaderView = loaderBackgroundView
         self.activityIndicator = activityIndicator
     }
     
+    @MainActor
     func hideLoading() {
         timeoutTask?.cancel()
         timeoutTask = nil
         
-        DispatchQueue.main.async { [weak self] in
+        guard let loaderView = self.loaderView,
+              let activityIndicator = self.activityIndicator else {
+            return
+        }
+        
+        UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseIn]) {
+            loaderView.alpha = 0
+            activityIndicator.alpha = 0
+        } completion: { [weak self] _ in
             guard let self = self else { return }
-            self.loaderView?.removeFromSuperview()
-            self.activityIndicator?.stopAnimating()
+            activityIndicator.stopAnimating()
+            loaderView.removeFromSuperview()
             self.loaderView = nil
             self.activityIndicator = nil
             self.isLoaderVisible = false
         }
     }
+    
 }

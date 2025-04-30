@@ -45,6 +45,7 @@ actor UserDefaultsManager {
 
     // MARK: - Clear All
     func clearAll() async {
+        await LoginModel.userCache.clear()
         for key in defaults.dictionaryRepresentation().keys {
             defaults.removeObject(forKey: key)
         }

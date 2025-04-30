@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SideMenuHeaderXIB" customModule="Broker_Portal" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" restorationIdentifier="SideMenuHeaderXIB" id="iN0-l3-epB" customClass="SideMenuHeaderXIB" customModule="Broker_Portal" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="458" height="445"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Va7-KU-RJB">
+                    <rect key="frame" x="6" y="59" width="446" height="352"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_home_white" translatesAutoresizingMaskIntoConstraints="NO" id="ZoJ-h0-f3i">
+                            <rect key="frame" x="14" y="166" width="18" height="20"/>
+                            <color key="tintColor" name="AppWhiteColor"/>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Other" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UUZ-tk-NhF">
+                            <rect key="frame" x="42" y="167.66666666666666" width="37.666666666666657" height="17"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="14"/>
+                            <color key="textColor" name="AppWhiteColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_dropdown" translatesAutoresizingMaskIntoConstraints="NO" id="2sK-3J-scD">
+                            <rect key="frame" x="421" y="172.66666666666666" width="11" height="7"/>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G5p-N0-Hwd">
+                            <rect key="frame" x="0.0" y="0.0" width="446" height="352"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="2sK-3J-scD" firstAttribute="centerY" secondItem="Va7-KU-RJB" secondAttribute="centerY" id="F9K-ZL-eXu"/>
+                        <constraint firstItem="G5p-N0-Hwd" firstAttribute="top" secondItem="Va7-KU-RJB" secondAttribute="top" id="Fyo-1f-3tX"/>
+                        <constraint firstAttribute="trailing" secondItem="2sK-3J-scD" secondAttribute="trailing" constant="14" id="IIV-JJ-dU0"/>
+                        <constraint firstAttribute="bottom" secondItem="G5p-N0-Hwd" secondAttribute="bottom" id="VZ7-Pr-B6W"/>
+                        <constraint firstItem="ZoJ-h0-f3i" firstAttribute="centerY" secondItem="Va7-KU-RJB" secondAttribute="centerY" id="VeH-b6-KUD"/>
+                        <constraint firstItem="UUZ-tk-NhF" firstAttribute="centerY" secondItem="Va7-KU-RJB" secondAttribute="centerY" id="bgr-rP-sZJ"/>
+                        <constraint firstItem="G5p-N0-Hwd" firstAttribute="leading" secondItem="Va7-KU-RJB" secondAttribute="leading" id="deG-4G-2k3"/>
+                        <constraint firstItem="ZoJ-h0-f3i" firstAttribute="leading" secondItem="Va7-KU-RJB" secondAttribute="leading" constant="14" id="oFp-Rz-FqA"/>
+                        <constraint firstItem="2sK-3J-scD" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="UUZ-tk-NhF" secondAttribute="trailing" constant="14" id="xXw-21-Dnd"/>
+                        <constraint firstAttribute="trailing" secondItem="G5p-N0-Hwd" secondAttribute="trailing" id="xuD-G1-vmg"/>
+                        <constraint firstItem="UUZ-tk-NhF" firstAttribute="leading" secondItem="ZoJ-h0-f3i" secondAttribute="trailing" constant="10" id="yDB-lm-yRM"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Va7-KU-RJB" secondAttribute="bottom" id="Oqt-RT-Dxs"/>
+                <constraint firstItem="Va7-KU-RJB" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="6" id="ktA-a5-iIx"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Va7-KU-RJB" secondAttribute="trailing" constant="6" id="p7e-Zr-cpG"/>
+                <constraint firstItem="Va7-KU-RJB" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="qD6-bp-N7e"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="btnTap" destination="G5p-N0-Hwd" id="FFe-Dc-d1g"/>
+                <outlet property="containerView" destination="Va7-KU-RJB" id="w28-dE-5sq"/>
+                <outlet property="imgDropDown" destination="2sK-3J-scD" id="gLz-zF-z7j"/>
+                <outlet property="imgMain" destination="ZoJ-h0-f3i" id="xdt-Un-iqT"/>
+                <outlet property="lblTitle" destination="UUZ-tk-NhF" id="RrI-Jg-rgU"/>
+            </connections>
+            <point key="canvasLocation" x="180.15267175572518" y="-175.70422535211267"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ic_dropdown" width="11" height="7"/>
+        <image name="ic_home_white" width="18" height="20"/>
+        <namedColor name="AppWhiteColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

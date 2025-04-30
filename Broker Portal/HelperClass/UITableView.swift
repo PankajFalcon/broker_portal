@@ -72,3 +72,45 @@ private class ClosureSleeve {
         closure()
     }
 }
+
+import UIKit
+
+extension UITableView {
+
+    /// Sets a custom message when there's no data.
+    /// - Parameters:
+    ///   - message: Message to display
+    ///   - font: Custom font (default is medium system font, 16pt)
+    ///   - textColor: Text color (default is light gray)
+    func setEmptyMessage(_ message: String,_ count: Int) {
+        if count != 0{
+            restoreBackground()
+            return
+        }
+        let messageLabel = UILabel()
+        messageLabel.text = message
+        messageLabel.font = InterFontStyle.medium.with(size: 16)
+        messageLabel.textColor = .lightGray
+        messageLabel.textAlignment = .center
+        messageLabel.numberOfLines = 0
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        let containerView = UIView()
+        containerView.addSubview(messageLabel)
+
+        NSLayoutConstraint.activate([
+            messageLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor, constant: -80),
+            messageLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            messageLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
+        ])
+
+        self.backgroundView = containerView
+        self.separatorStyle = .none
+    }
+
+    /// Restores the table view to normal background.
+    func restoreBackground() {
+        self.backgroundView = nil
+        self.separatorStyle = .singleLine
+    }
+}

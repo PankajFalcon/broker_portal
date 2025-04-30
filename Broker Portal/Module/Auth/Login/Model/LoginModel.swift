@@ -17,6 +17,8 @@ struct LoginModel: Codable {
     let message: String?
     let accountLocked: Int?
     
+    static let userCache = UserCache()
+    
     enum CodingKeys: String, CodingKey {
         case status
         case accessToken = "access_token"
@@ -28,22 +30,13 @@ struct LoginModel: Codable {
         case additionalAccess = "additional_access"
     }
     
-    /// Computed property that automatically decrypts and parses the user token
     var decodedUser: UserModel? {
         get async {
-            guard let user = user else { return nil }
-            
-            // Perform the decryption asynchronously
-            let decrypted = await AESDecryptor.decryptCBC(base64EncodedString: user)
-            
-            // Parse the decrypted data
-            let model = parseUser(from: decrypted ?? "")
-            
-            return model
+            await LoginModel.userCache.getDecodedUser(from: user)
         }
     }
-    
 }
+
 
 struct ApplicationProfile: Codable {
     let trucking: Bool
@@ -101,7 +94,27 @@ func parseUser(from decryptedString: String) -> UserModel? {
         let user = try decoder.decode(UserModel.self, from: data)
         return user
     } catch {
-        print("Failed to decode user: \(error)")
+        Log.error("Failed to decode user", error: error)
         return nil
+    }
+}
+
+actor UserCache {
+    private var cachedUser: UserModel?
+    
+    func getDecodedUser(from encrypted: String?) async -> UserModel? {
+        if let cachedUser {
+            return cachedUser
+        }
+        guard let encrypted else { return nil }
+        
+        let decrypted = await AESDecryptor.decryptCBC(base64EncodedString: encrypted)
+        let model = parseUser(from: decrypted ?? "")
+        cachedUser = model
+        return model
+    }
+    
+    func clear() {
+        cachedUser = nil
     }
 }

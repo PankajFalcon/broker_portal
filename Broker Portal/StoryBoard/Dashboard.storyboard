@@ -89,9 +89,10 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="kV0-Hf-bJ0">
-                                <rect key="frame" x="20" y="179" width="353" height="629"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="kV0-Hf-bJ0">
+                                <rect key="frame" x="0.0" y="179" width="393" height="629"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
@@ -100,11 +101,11 @@
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="kV0-Hf-bJ0" secondAttribute="bottom" constant="10" id="0uT-aa-3kL"/>
                             <constraint firstItem="dK7-zc-uPs" firstAttribute="top" secondItem="M31-Ll-fdo" secondAttribute="bottom" constant="10" id="46v-JB-avy"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="M31-Ll-fdo" secondAttribute="trailing" constant="20" id="Adi-Za-hjy"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="kV0-Hf-bJ0" secondAttribute="trailing" constant="20" id="Dv2-M3-a6K"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="kV0-Hf-bJ0" secondAttribute="trailing" id="Dv2-M3-a6K"/>
                             <constraint firstItem="kV0-Hf-bJ0" firstAttribute="top" secondItem="dK7-zc-uPs" secondAttribute="bottom" constant="10" id="FhO-Iy-jWj"/>
                             <constraint firstItem="dK7-zc-uPs" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="I5c-Pl-CSx"/>
                             <constraint firstItem="M31-Ll-fdo" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="RrS-ax-KKz"/>
-                            <constraint firstItem="kV0-Hf-bJ0" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="fm5-VC-0Xu"/>
+                            <constraint firstItem="kV0-Hf-bJ0" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="fm5-VC-0Xu"/>
                             <constraint firstItem="M31-Ll-fdo" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="10" id="ljG-N6-UcZ"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="dK7-zc-uPs" secondAttribute="trailing" constant="20" id="qhc-gX-4F3"/>
                         </constraints>
