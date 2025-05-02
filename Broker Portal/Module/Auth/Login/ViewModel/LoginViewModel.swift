@@ -29,8 +29,14 @@ class LoginViewModel {
                     responseType: LoginModel.self
                 )
                 if response.status != 0 {
-                    await UserDefaultsManager.shared.set(response, forKey: UserDefaultsKey.LoginResponse)
-                    await self.view?.push(DashboardVC.self, from: .dashboard)
+                    if await response.decodedUser?.userTypeId ?? 0 == 41{
+                        await self.view?.present(SelectAgencyVC.self, from: .main) { vc in
+
+                        }
+                    }else{
+                        await UserDefaultsManager.shared.set(response, forKey: UserDefaultsKey.LoginResponse)
+                        await self.view?.push(DashboardVC.self, from: .dashboard)
+                    }
                 } else {
                     await ToastManager.shared.showToast(message: response.message ?? "")
                 }

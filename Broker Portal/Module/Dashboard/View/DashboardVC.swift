@@ -62,14 +62,14 @@ class DashboardVC: UIViewController {
     private func refreshData() async {
         // Your API call or logic
         view.endEditing(true)
+        tableView.endRefreshing()
+        viewModel?.model?.page = 1
         if isActivity == true{
             await fetchActivities()
         }else{
             await fetchPolicy()
         }
         
-        // Once done:
-        tableView.endRefreshing()
     }
     
     private func setupSearchTextField() {
@@ -217,18 +217,21 @@ extension DashboardVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let viewModel, viewModel.isLoading == false else { return }
+        guard let viewModel, viewModel.isLoading == true else { return }
         
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
-        let threshold: CGFloat = 100 // Trigger when 100pts before bottom
+        let threshold: CGFloat = 100
         
         if offsetY > contentHeight - scrollView.frame.height - threshold {
+            // Copy reference to avoid conflict
+            let currentPage = (viewModel.model?.page ?? 0) + 1
+            
             Task { [weak self] in
                 guard let self else { return }
                 
-                viewModel.isLoading = true
-                viewModel.model?.page = (viewModel.model?.page ?? 1) + 1
+                viewModel.isLoading = false // mark as loading
+                viewModel.model?.page = currentPage
                 
                 if isActivity ?? false {
                     await fetchActivities()
@@ -238,4 +241,5 @@ extension DashboardVC: UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
+    
 }

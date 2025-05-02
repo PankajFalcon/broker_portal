@@ -7,7 +7,7 @@
 
 struct DashboardRequestModel: Codable {
     var page: Int? = 1
-    var limit: Int? = 10
+    var limit: Int? = 20
     var filter_flag: Int? = 1
     var underwriter: String? = ""
     var include_deleted: Int? = 0

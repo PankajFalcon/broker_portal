@@ -7,6 +7,16 @@
 
 import UIKit
 
+extension UITableViewCell{
+    static var reuseIdentifier: String {
+        return String(describing: self)
+    }
+    
+    static var nib: UINib {
+        return UINib(nibName: String(describing: self), bundle: Bundle(for: Self.self))
+    }
+}
+
 extension UITableView {
     
     /// Adds a pull-to-refresh control to the table view

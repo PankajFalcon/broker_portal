@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 struct RecentActivityModel: Codable {
     let message: String?
     let status: Int?
@@ -38,7 +39,7 @@ struct RecentActivityRecord: Codable {
     let submissionId: Int?
     let policyNumber: String?
     let lockedStatus: Int?
-    let lockedBy: String?
+    let lockedBy: Int?
     let shortName: String?
     let agencyId: Int?
     let insuredName: String?

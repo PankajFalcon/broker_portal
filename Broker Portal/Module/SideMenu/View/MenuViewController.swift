@@ -120,24 +120,17 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
         view.btnTap.removeTarget(nil, action: nil, for: .allEvents)
         view.btnTap.addTarget(self, action: #selector(menuOnTap(_:)), for: .touchUpInside)
         
-        if section == selectedIndex{
-            view.containerView.backgroundColor = .AppWhiteColor
-            view.imgMain.tintColor = .LableTittleColor
-            view.lblTitle.textColor = .LableTittleColor
-            view.imgDropDown.tintColor = .LableTittleColor
-        }else{
-            view.containerView.backgroundColor = .clear
-            view.imgMain.tintColor = .AppWhiteColor
-            view.lblTitle.textColor = .AppWhiteColor
-            view.imgDropDown.tintColor = .AppWhiteColor
-        }
+        view.containerView.backgroundColor = section == selectedIndex ? .AppWhiteColor : .clear
+        view.imgMain.tintColor = section == selectedIndex ? .LableTittleColor : .AppWhiteColor
+        view.lblTitle.textColor = section == selectedIndex ? .LableTittleColor : .AppWhiteColor
+        view.imgDropDown.tintColor = section == selectedIndex ? .LableTittleColor : .AppWhiteColor
         
         return view
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SideMenuXIB", for: indexPath) as? SideMenuXIB else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SideMenuXIB.reuseIdentifier, for: indexPath) as? SideMenuXIB else {
             return UITableViewCell()
         }
         
@@ -147,10 +140,11 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
         cell.imgDropDown.isHidden = true
         cell.btnTap.isUserInteractionEnabled = false
         return cell
+        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         debugPrint("section : \(indexPath.section) , indexPath : \(indexPath.row)")
     }
+    
 }
-

@@ -60,6 +60,8 @@ public extension UIViewController {
     func present<T: UIViewController>(_ type: T.Type, from storyboard: AppStoryboard, setup: ((T) -> Void)? = nil) {
         let vc = T.instantiate(from: storyboard)
         setup?(vc)
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
         present(vc, animated: true)
     }
     

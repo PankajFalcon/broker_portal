@@ -65,7 +65,7 @@ enum APIError: Error,LocalizedError {
         case .notFound:
             return "The requested resource could not be found. Please verify the URL and try again."
         case .authenticationFailed:
-            return ""
+            return "Your login session has timed out. Please sign in again."
         }
     }
     // ✅ Override `LocalizedError`'s `errorDescription` to return `errorMessage`
@@ -73,7 +73,6 @@ enum APIError: Error,LocalizedError {
         return errorMessage
     }
 }
-
 
 // Lightweight API manager with memory-efficient calls
 public actor APIManager {
@@ -274,8 +273,6 @@ public actor APIManager {
         }
     }
     
-    
-    
     // MARK: - Multipart Upload with Progress Tracking
     private func uploadMultipart(to url: URL, parameters: [String: Any], files: [APIRequest.File], headers: [String: Any]?) async throws -> Data {
         let boundary = "Boundary-\(UUID().uuidString)"
@@ -331,7 +328,7 @@ public actor APIManager {
             throw APIError.authenticationFailed
         }
         
-        let refreshURL = URL(string: "https://futuristic-policy.dev.falconsystem.com/ams-v1/adminop/get-refresh-token")!
+        guard let refreshURL = APIConstants.refreshToken else { return }
         var request = URLRequest(url: refreshURL)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

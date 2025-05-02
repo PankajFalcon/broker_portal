@@ -31,18 +31,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func setRoot() async {
-        let token = await UserDefaultsManager.shared
+        let accessToken = await UserDefaultsManager.shared
             .get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?
             .accessToken?
             .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        
-        if token.isEmpty {
-            window?.setRootViewController(LoginVC.self, from: .main)
+
+        let rootViewController: UIViewController
+
+        if accessToken.isEmpty {
+            rootViewController = LoginVC.instantiate(fromStoryboard: .main, identifier: "LoginVC")
         } else {
-            let dashboardVC = DashboardVC.instantiate(fromStoryboard: .dashboard, identifier: "DashboardVC")
-            createSideMenu(rootVC: dashboardVC)
+            rootViewController = DashboardVC.instantiate(fromStoryboard: .dashboard, identifier: "DashboardVC")
         }
+
+        createSideMenu(rootVC: rootViewController)
     }
+
     
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

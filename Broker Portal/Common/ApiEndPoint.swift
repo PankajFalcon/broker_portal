@@ -18,6 +18,8 @@ enum APIConstants{
     static let version = "/ams-v1"
     
     static var userlogin: URL? { url("/adminop/userlogin") }
+    static var refreshToken: URL? { url("/adminop/get-refresh-token") }
+    static var brokerList: URL? { url("/accounting/broker/get") }
     static var recentActivity: URL? { url("/quoteop/get_quotes_for_broker_recent_activity") }
     static var getPolicy: URL? { url("/quoteop/get-all-policy-data-paginated") }
     

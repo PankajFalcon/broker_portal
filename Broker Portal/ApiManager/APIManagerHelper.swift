@@ -28,10 +28,8 @@ public class APIManagerHelper : @unchecked Sendable{
             loaderManager.hideLoading()
         }
         do {
-            //            loaderManager.hideLoading()
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
-            //            loaderManager.hideLoading()
             throw APIError.decodingError("Failed to decode response into \(T.self): \(error.localizedDescription)")
         }
     }

@@ -64,8 +64,8 @@ struct UserModel: Codable {
     let isAllowedToChat: String?
     let agencyId: Int?
     let userStatus: String?
-    let additionalAccess: [String]?
-    let ticketProfile: [String]?
+    let additionalAccess: [AdditionalAccess]?
+    let ticketProfile: [TicketProfile]?
     let applicationProfile: ApplicationProfile
     
     enum CodingKeys: String, CodingKey {
@@ -86,6 +86,37 @@ struct UserModel: Codable {
         case applicationProfile = "application_profile"
     }
 }
+
+struct AdditionalAccess: Codable {
+    let type: String
+    let selected: Bool
+    let permissions: Permissions
+}
+
+struct Permissions: Codable {
+    let view: Bool
+    let add: Bool
+    let edit: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case view = "VIEW"
+        case add = "ADD"
+        case edit = "EDIT"
+    }
+}
+
+struct TicketProfile: Codable {
+    let roleKey: String
+    let roleDescription: String
+    let access: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case roleKey = "role_key"
+        case roleDescription = "role_description"
+        case access
+    }
+}
+
 
 func parseUser(from decryptedString: String) -> UserModel? {
     guard let data = decryptedString.data(using: .utf8) else { return nil }
