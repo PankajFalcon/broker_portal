@@ -18,7 +18,7 @@ class DashboardViewModel{
     }
     
     func fetchActivitiesAndPolicy() {
-        guard let view = self.view else { return }
+//        guard let view = self.view else { return }
         
         // Using Task to run both API calls concurrently
         Task {

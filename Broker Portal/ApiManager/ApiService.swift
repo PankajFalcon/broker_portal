@@ -229,6 +229,7 @@ public actor APIManager {
         setHeaders(request: &request, headers: headers)
         
         let (data, response) = try await session.data(for: request)
+        debugPrint("Response : \(try data.toDictionary())")
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             throw APIError.invalidResponse
         }

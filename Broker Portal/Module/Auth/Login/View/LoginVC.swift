@@ -36,11 +36,11 @@ class LoginVC: UIViewController {
     // MARK: - Setup
     
     private func setupView() {
-        // txtEmail.text = "admin@all.com"
-        // txtPassword.text = "admin@1234"
+         txtEmail.text = "admin@all.com"
+         txtPassword.text = "admin@1234"
         
-        txtEmail.text = "ashishverma@falconsystem.com"
-        txtPassword.text = "Test@1234"
+//        txtEmail.text = "ashishverma@falconsystem.com"
+//        txtPassword.text = "Test@1234"
         
         txtEmail.font = InterFontStyle.medium.with(size: 14)
         txtPassword.font = InterFontStyle.medium.with(size: 14)

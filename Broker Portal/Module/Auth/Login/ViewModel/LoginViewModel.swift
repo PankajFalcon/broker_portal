@@ -5,6 +5,8 @@
 //  Created by Pankaj on 23/04/25.
 //
 
+import UIKit
+
 class LoginViewModel {
     
     private weak var view: LoginVC? // ✅ weak to avoid memory leaks
@@ -35,7 +37,15 @@ class LoginViewModel {
                         }
                     }else{
                         await UserDefaultsManager.shared.set(response, forKey: UserDefaultsKey.LoginResponse)
-                        await self.view?.push(DashboardVC.self, from: .dashboard)
+//                        await self.view?.push(DashboardVC.self, from: .dashboard)
+                        if let scene = await UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let sceneDelegate = await scene.delegate as? SceneDelegate {
+                            
+                            Task { @MainActor in
+                                await sceneDelegate.setRoot()
+                            }
+                        }
+
                     }
                 } else {
                     await ToastManager.shared.showToast(message: response.message ?? "")

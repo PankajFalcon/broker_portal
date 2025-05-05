@@ -25,19 +25,19 @@ enum AppTitle:String{
 public extension UIViewController {
     
     /// Instantiate a view controller from a storyboard.
-        /// - Parameters:
-        ///   - storyboardName: The name of the storyboard file.
-        ///   - identifier: The view controller's storyboard ID. If nil, the class name will be used.
-        /// - Returns: An instantiated view controller of the expected type.
+    /// - Parameters:
+    ///   - storyboardName: The name of the storyboard file.
+    ///   - identifier: The view controller's storyboard ID. If nil, the class name will be used.
+    /// - Returns: An instantiated view controller of the expected type.
     static func instantiate<T: UIViewController>(fromStoryboard storyboardName: AppStoryboard, identifier: String? = nil) -> T {
         let storyboard = UIStoryboard(name: storyboardName.rawValue, bundle: nil)
-            let id = identifier ?? String(describing: T.self)
-            
-            guard let viewController = storyboard.instantiateViewController(withIdentifier: id) as? T else {
-                fatalError("❌ ViewController with identifier \(id) not found in \(storyboardName) storyboard.")
-            }
-            return viewController
+        let id = identifier ?? String(describing: T.self)
+        
+        guard let viewController = storyboard.instantiateViewController(withIdentifier: id) as? T else {
+            fatalError("❌ ViewController with identifier \(id) not found in \(storyboardName) storyboard.")
         }
+        return viewController
+    }
     
     /// Push a view controller from storyboard onto the current navigation stack
     func push<T: UIViewController>(_ type: T.Type, from storyboard: AppStoryboard, setup: ((T) -> Void)? = nil) {
@@ -67,7 +67,7 @@ public extension UIViewController {
     
 }
 
- extension UIViewController {
+extension UIViewController {
     
     //MARK: How to use
     //        configureNavigationBar(title: "Abc",leftImage: UIImage(named: "Vector"), leftAction:  {
@@ -84,60 +84,122 @@ public extension UIViewController {
     ///   - rightImage: Optional right button image
     ///   - rightAction: Action closure for right button
     
+    func actionSheet(agencyID: Int) {
+        var actions: [ActionSheetAction] = [
+            .init(title: "User Profile", type: .default, handler: {
+                debugPrint("User Profile tapped")
+            })
+        ]
+        
+        // Add "Change Agency" only if agencyID is 41
+        if agencyID == 41 {
+            actions.append(
+                .init(title: "Change Agency", type: .default, handler: {
+                    self.present(SelectAgencyVC.self, from: .main) { vc in
+                        // Configure VC if needed
+                    }
+                })
+            )
+        }
+        
+        actions.append(contentsOf: [
+            .init(title: "Logout", type: .destructive, handler: {
+                print("Logout tapped")
+            }),
+            .init(title: "Cancel", type: .cancel, handler: nil)
+        ])
+        
+        Task{
+            ActionSheetHelper.showActionSheet(
+                on: self,
+                title: agencyID == 41 ? "\(await UserDefaultsManager.shared.fatchCurentUser()?.firstName ?? "") \(await UserDefaultsManager.shared.fatchCurentUser()?.lastName ?? "")\n\(await UserDefaultsManager.shared.getSelectedAgency()?.name ?? "")" : "\(await UserDefaultsManager.shared.fatchCurentUser()?.firstName ?? "") \(await UserDefaultsManager.shared.fatchCurentUser()?.lastName ?? "")",
+                message: "Please select an action",
+                actions: actions,
+                sourceView: self.view
+            )
+        }
+    }
+    
+    
     func configureNavigationBar(
         title: String? = nil,
         leftTitle: String? = nil,
         leftImage: Icon? = nil,
+        leftCustomImage: UIImage? = nil,
         leftAction: (() -> Void)? = nil,
         rightTitle: String? = nil,
         rightImage: Icon? = nil,
+        rightCustomImage: UIImage? = nil,
+        isRightCustomImage:Bool? = false,
         rightAction: (() -> Void)? = nil
     ) {
         self.title = title
         
-        // Left Button
-        if let leftAction = leftAction {
-            let action = UIAction { [weak self] _ in
-                guard self != nil else {return}
-                leftAction()
-            }
-            navigationItem.leftBarButtonItem = UIBarButtonItem(
-                title: leftTitle,
-                image: leftImage?.image,
-                primaryAction: action,
-                menu: nil
-            )
-        } else if leftTitle != nil || leftImage != nil {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(
-                title: leftTitle,
-                style: .plain,
-                target: self,
-                action: #selector(defaultBackAction)
-            )
-            navigationItem.leftBarButtonItem?.image = leftImage?.image
-        }
+        navigationItem.leftBarButtonItem = createBarButtonItem(
+            title: leftTitle,
+            image: leftImage?.image,
+            customImage: leftCustomImage,
+            action: leftAction
+        )
         
-        // Right Button
-        if let rightAction = rightAction {
-            let action = UIAction { [weak self] _ in
-                guard self != nil else {return}
-                rightAction()
-            }
-            navigationItem.rightBarButtonItem = UIBarButtonItem(
+        Task{
+            navigationItem.rightBarButtonItem = createBarButtonItem(
                 title: rightTitle,
                 image: rightImage?.image,
-                primaryAction: action,
-                menu: nil
+                customImage: isRightCustomImage == true ? rightCustomImage == nil ? await UserImageGenerator.generateProfileImage(imageURLString: UserDefaultsManager.shared.fatchCurentUser()?.image ?? "", firstName: UserDefaultsManager.shared.fatchCurentUser()?.firstName ?? "", lastName: UserDefaultsManager.shared.fatchCurentUser()?.lastName ?? "") : rightCustomImage : nil,
+                action: rightAction
             )
-        } else if rightTitle != nil || rightImage != nil {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: rightTitle,
-                style: .plain,
-                target: nil,
-                action: nil
-            )
-            navigationItem.rightBarButtonItem?.image = rightImage?.image
         }
+    }
+    
+    private func createBarButtonItem(
+        title: String?,
+        image: UIImage?,
+        customImage: UIImage?,
+        action: (() -> Void)?
+    ) -> UIBarButtonItem? {
+        if let customImage = customImage {
+            let button = UIButton(type: .custom)
+            button.setImage(customImage, for: .normal)
+            button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+            button.imageView?.contentMode = .scaleAspectFill
+            button.layer.cornerRadius = 20
+            button.layer.borderColor = UIColor.headerGreen.cgColor
+            button.layer.borderWidth = 1
+            button.clipsToBounds = true
+            button.isUserInteractionEnabled = true
+            
+            if action != nil {
+                button.addAction(UIAction { _ in
+                    //                     action()
+                    Task{
+                        await self.actionSheet(agencyID: UserDefaultsManager.shared.fatchCurentUser()?.userTypeId ?? 0)
+                    }
+                }, for: .touchUpInside)
+            }
+            
+            return UIBarButtonItem(customView: button)
+        } else if let image = image {
+            if let action = action {
+                return UIBarButtonItem(
+                    title: title,
+                    image: image,
+                    primaryAction: UIAction { _ in
+                        action()
+                    },
+                    menu: nil
+                )
+            } else {
+                let barButton = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(defaultBackAction))
+                barButton.image = image
+                return barButton
+            }
+        } else if let title = title {
+            let barButton = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(defaultBackAction))
+            return barButton
+        }
+        
+        return nil
     }
     
     // MARK: - Default Back Button Fallback

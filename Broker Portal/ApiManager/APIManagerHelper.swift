@@ -16,11 +16,13 @@ public class APIManagerHelper : @unchecked Sendable{
     
     /// Generic function to handle API requests and decode response into a Codable model
     public func handleRequest<T: Codable>(
-        _ request: APIRequest,
+        _ request: APIRequest,isloaderHide:Bool?=true,
         responseType: T.Type,
         progress: ((APIRequest.File, Double) -> Void)? = nil
     ) async throws -> T {
-        loaderManager.showLoadingWithDelay()
+        if isloaderHide == true{
+            loaderManager.showLoadingWithDelay()
+        }
         let data = try await APIManager.shared.handleRequest(request, progress: progress)
         // After 1 second (API returns fast)
         
@@ -30,6 +32,7 @@ public class APIManagerHelper : @unchecked Sendable{
         do {
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
+            await loaderManager.hideLoading()
             throw APIError.decodingError("Failed to decode response into \(T.self): \(error.localizedDescription)")
         }
     }

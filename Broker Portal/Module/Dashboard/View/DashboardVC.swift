@@ -33,8 +33,10 @@ class DashboardVC: UIViewController {
         // Configure navigation bar
         configureNavigationBar(
             title: AppTitle.Dashboard.rawValue,
-            leftAction: { self.popView() }
-        )
+            leftAction: { self.popView() },isRightCustomImage: true) {
+                
+                
+            }
         
         setupSearchTextField()
         
@@ -100,9 +102,9 @@ class DashboardVC: UIViewController {
     // MARK: - Button Actions
     @IBAction func activityOnPress(_ sender: UIButton) {
         SideMenuManager.shared.toggleMenu()
-//        Task{
-//            await setupButtonStates(isActivitySelected: true)
-//        }
+        //        Task{
+        //            await setupButtonStates(isActivitySelected: true)
+        //        }
     }
     
     @IBAction func policyOnPress(_ sender: UIButton) {

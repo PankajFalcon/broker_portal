@@ -486,7 +486,7 @@
                                             <constraint firstAttribute="width" constant="24" id="GXV-WM-2aS"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="X">
+                                        <state key="normal" image="ic_white_cross">
                                             <color key="titleColor" name="LableTittleColor"/>
                                         </state>
                                         <connections>
@@ -507,20 +507,24 @@
                                         </userDefinedRuntimeAttributes>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mDw-VU-E4h">
-                                        <rect key="frame" x="116.66666666666666" y="175.66666666666669" width="100" height="40"/>
+                                        <rect key="frame" x="106.66666666666666" y="175.66666666666669" width="120" height="40"/>
                                         <color key="backgroundColor" name="HeaderGreenColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="WLU-Sn-bSh"/>
-                                            <constraint firstAttribute="width" constant="100" id="f6R-fD-170"/>
+                                            <constraint firstAttribute="width" constant="120" id="f6R-fD-170"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="Login">
+                                        <state key="normal" title="Continue">
                                             <color key="titleColor" name="AppWhiteColor"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <action selector="loginOnPress:" destination="ltq-yy-K1c" eventType="touchUpInside" id="gEP-S8-fT0"/>
-                                            <action selector="saveOnPress:" destination="41z-zR-u4B" eventType="touchUpInside" id="dWh-0u-mRe"/>
+                                            <action selector="saveOnPress:" destination="41z-zR-u4B" eventType="touchUpInside" id="1ug-Yf-GnE"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -597,6 +601,7 @@
         <image name="ic_info" width="17" height="18"/>
         <image name="ic_professional" width="22" height="22"/>
         <image name="ic_trucking" width="23" height="18"/>
+        <image name="ic_white_cross" width="13" height="12"/>
         <image name="ic_white_logo" width="220" height="60"/>
         <namedColor name="AppWhiteColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

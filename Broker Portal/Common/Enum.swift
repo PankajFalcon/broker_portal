@@ -9,11 +9,13 @@ import UIKit
 
 enum Icon {
     case back
-
+    case cross
     var image: UIImage? {
         switch self {
         case .back:
             return UIImage(named: "ic_back") // Make sure this name matches your asset catalog
+        case .cross:
+            return UIImage(named: "ic_white_cross")
         }
     }
 }

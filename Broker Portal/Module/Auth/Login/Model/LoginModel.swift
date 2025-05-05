@@ -53,6 +53,7 @@ struct UserModel: Codable {
     let usertype: String?
     let userTypeId: Int?
     let firstName: String?
+    let image: String?
     let lastName: String?
     let address: String?
     let city: String?
@@ -70,6 +71,7 @@ struct UserModel: Codable {
     
     enum CodingKeys: String, CodingKey {
         case userId = "user_id"
+        case image = "image"
         case usertype
         case userTypeId = "user_type_id"
         case firstName = "first_name"

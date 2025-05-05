@@ -9,6 +9,8 @@ import Foundation
 
 struct UserDefaultsKey{
     static let LoginResponse = "loginResponse"
+    static let Agencies = "Agencies"
+    static let SelectedAgencies = "SelectedAgencies"
 }
 
 actor UserDefaultsManager {
@@ -50,6 +52,15 @@ actor UserDefaultsManager {
             defaults.removeObject(forKey: key)
         }
     }
+    
+    func getSelectedAgency() async -> AgencyModelResponseData?{
+        return await UserDefaultsManager.shared.get(AgencyModelResponseData.self, forKey: UserDefaultsKey.SelectedAgencies)
+    }
+    
+    func fatchCurentUser() async -> UserModel?{
+        return await UserDefaultsManager.shared.get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?.decodedUser
+    }
+    
 }
 
 //MARK: How to use this class

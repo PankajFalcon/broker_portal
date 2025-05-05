@@ -30,23 +30,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         SideMenuManager.shared.setup(menu: menuVC, root: rootVC, in: window)
     }
     
-    private func setRoot() async {
+     func setRoot() async {
         let accessToken = await UserDefaultsManager.shared
             .get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?
             .accessToken?
             .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-
+        
         let rootViewController: UIViewController
-
+        
         if accessToken.isEmpty {
             rootViewController = LoginVC.instantiate(fromStoryboard: .main, identifier: "LoginVC")
         } else {
             rootViewController = DashboardVC.instantiate(fromStoryboard: .dashboard, identifier: "DashboardVC")
         }
-
+        
         createSideMenu(rootVC: rootViewController)
     }
-
+    
     
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

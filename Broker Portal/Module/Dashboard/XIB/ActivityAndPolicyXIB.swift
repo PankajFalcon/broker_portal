@@ -24,7 +24,7 @@ class ActivityAndPolicyXIB: UITableViewCell {
         lblPremium.text = value.premium ?? "$0.0"
         lblQuoteNo.text = "\(value.quoteId ?? 0)"
         lblCompanyName.text = value.insuredName ?? ""
-        lblDate.text = value.submitDate ?? ""
+        lblDate.text = value.effectiveStringObject ?? ""
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

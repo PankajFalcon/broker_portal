@@ -74,7 +74,11 @@ struct RecentActivityRecord: Codable {
     let treatyId: Int?
     let statusId: Int?
     let isBrokerPortal: Int?
-
+    
+    /// New date value from `effectiveDate` string
+    //    let effectiveDateObject: Date?
+    let effectiveStringObject: String?
+    
     enum CodingKeys: String, CodingKey {
         case submissionId = "submission_id"
         case policyNumber = "policy_number"
@@ -115,4 +119,62 @@ struct RecentActivityRecord: Codable {
         case statusId = "status_id"
         case isBrokerPortal = "is_broker_portal"
     }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        submissionId = try container.decodeIfPresent(Int.self, forKey: .submissionId)
+        policyNumber = try container.decodeIfPresent(String.self, forKey: .policyNumber)
+        lockedStatus = try container.decodeIfPresent(Int.self, forKey: .lockedStatus)
+        lockedBy = try container.decodeIfPresent(Int.self, forKey: .lockedBy)
+        shortName = try container.decodeIfPresent(String.self, forKey: .shortName)
+        agencyId = try container.decodeIfPresent(Int.self, forKey: .agencyId)
+        insuredName = try container.decodeIfPresent(String.self, forKey: .insuredName)
+        insuredGaragingState = try container.decodeIfPresent(String.self, forKey: .insuredGaragingState)
+        isActive = try container.decodeIfPresent(Int.self, forKey: .isActive)
+        insuredOtherName1 = try container.decodeIfPresent(String.self, forKey: .insuredOtherName1)
+        insuredOtherName2 = try container.decodeIfPresent(String.self, forKey: .insuredOtherName2)
+        insuredId = try container.decodeIfPresent(String.self, forKey: .insuredId)
+        quoteDesc = try container.decodeIfPresent(String.self, forKey: .quoteDesc)
+        expDate = try container.decodeIfPresent(String.self, forKey: .expDate)
+        dotNumber = try container.decodeIfPresent(String.self, forKey: .dotNumber)
+        effectiveDate = try container.decodeIfPresent(String.self, forKey: .effectiveDate)
+        submitDate = try container.decodeIfPresent(String.self, forKey: .submitDate)
+        quoteId = try container.decodeIfPresent(Int.self, forKey: .quoteId)
+        lobId = try container.decodeIfPresent(Int.self, forKey: .lobId)
+        claimCount = try container.decodeIfPresent(Int.self, forKey: .claimCount)
+        isBrokerQuote = try container.decodeIfPresent(Int.self, forKey: .isBrokerQuote)
+        premium = try container.decodeIfPresent(String.self, forKey: .premium)
+        lob = try container.decodeIfPresent(String.self, forKey: .lob)
+        riskCompany = try container.decodeIfPresent(String.self, forKey: .riskCompany)
+        underwriterId = try container.decodeIfPresent(Int.self, forKey: .underwriterId)
+        underwriter = try container.decodeIfPresent(String.self, forKey: .underwriter)
+        agencyAbbr = try container.decodeIfPresent(String.self, forKey: .agencyAbbr)
+        agency = try container.decodeIfPresent(String.self, forKey: .agency)
+        status = try container.decodeIfPresent(String.self, forKey: .status)
+        duplicates = try container.decodeIfPresent(String.self, forKey: .duplicates)
+        cancellationDate = try container.decodeIfPresent(String.self, forKey: .cancellationDate)
+        isPersonalAuto = try container.decodeIfPresent(Int.self, forKey: .isPersonalAuto)
+        applicationTypeId = try container.decodeIfPresent(Int.self, forKey: .applicationTypeId)
+        product = try container.decodeIfPresent(String.self, forKey: .product)
+        treatyDescription = try container.decodeIfPresent(String.self, forKey: .treatyDescription)
+        treatyId = try container.decodeIfPresent(Int.self, forKey: .treatyId)
+        statusId = try container.decodeIfPresent(Int.self, forKey: .statusId)
+        isBrokerPortal = try container.decodeIfPresent(Int.self, forKey: .isBrokerPortal)
+        
+        // Convert effectiveDate string to Date
+        if let dateString = effectiveDate {
+            effectiveStringObject = DateUtils.convertDateFormat(dateString: dateString, inputFormat: .yyyyMMdd, outputFormat: .ddMMyyyy)
+        } else {
+            effectiveStringObject = nil
+        }
+        
+        //        // Convert effectiveDate string to Date
+        //        if let dateString = effectiveDate {
+        //            effectiveDateObject = DateUtils.convertToDate(dateString: dateString, inputFormat: .fullDateTime)
+        //        } else {
+        //            effectiveDateObject = nil
+        //        }
+    }
 }
+
