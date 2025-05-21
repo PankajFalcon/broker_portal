@@ -34,7 +34,7 @@ struct UserImageGenerator {
                 debugPrint("Error downloading image: \(error)")
             }
         } else {
-            debugPrint("Invalid URL: \(String(describing: imageURLString))")
+            debugPrint("Invalid URL: \(String(describing: imageURLString ?? ""))")
         }
         
         // If image not available, generate initials image

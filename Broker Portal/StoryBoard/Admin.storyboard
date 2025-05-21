@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--UsersVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="UsersVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Y6W-OH-hqX" customClass="UsersVC" customModule="Broker_Portal" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="search..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XBd-sp-Pag">
+                                <rect key="frame" x="20" y="69" width="353" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="Bk5-hc-uST"/>
+                                </constraints>
+                                <color key="textColor" name="LableTittleColor"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="leftPadding">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="utT-io-AiR">
+                                <rect key="frame" x="0.0" y="129" width="393" height="723"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" name="AppWhiteColor"/>
+                        <constraints>
+                            <constraint firstItem="utT-io-AiR" firstAttribute="top" secondItem="XBd-sp-Pag" secondAttribute="bottom" constant="10" id="5sE-3d-M1q"/>
+                            <constraint firstItem="XBd-sp-Pag" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="MFz-R2-DZ6"/>
+                            <constraint firstItem="utT-io-AiR" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="MOJ-qm-66g"/>
+                            <constraint firstItem="XBd-sp-Pag" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="10" id="PXj-id-5RN"/>
+                            <constraint firstAttribute="trailing" secondItem="utT-io-AiR" secondAttribute="trailing" id="Yno-E3-3tp"/>
+                            <constraint firstAttribute="trailing" secondItem="XBd-sp-Pag" secondAttribute="trailing" constant="20" id="awq-L4-iQh"/>
+                            <constraint firstAttribute="bottom" secondItem="utT-io-AiR" secondAttribute="bottom" id="gN1-Es-9BG"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="utT-io-AiR" id="IFU-Ty-toX"/>
+                        <outlet property="txtSearch" destination="XBd-sp-Pag" id="ufr-EI-238"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="132" y="-27"/>
+        </scene>
+        <!--Add UserVC-->
+        <scene sceneID="70I-7C-cq7">
+            <objects>
+                <viewController storyboardIdentifier="AddUserVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="MtR-Co-tyd" customClass="AddUserVC" customModule="Broker_Portal" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="1wY-D4-tX6">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Kvv-Ut-XsW">
+                                <rect key="frame" x="0.0" y="59" width="393" height="699"/>
+                            </tableView>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cJF-rt-QhA">
+                                <rect key="frame" x="20" y="768" width="353" height="40"/>
+                                <color key="backgroundColor" name="HeaderGreenColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="YM9-eH-Tjx"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Submit">
+                                    <color key="titleColor" name="AppWhiteColor"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="submitOnPress:" destination="MtR-Co-tyd" eventType="touchUpInside" id="Ejr-tP-apm"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6bW-Py-OjK"/>
+                        <color key="backgroundColor" name="AppWhiteColor"/>
+                        <constraints>
+                            <constraint firstItem="Kvv-Ut-XsW" firstAttribute="top" secondItem="6bW-Py-OjK" secondAttribute="top" id="9RN-zZ-w9k"/>
+                            <constraint firstItem="cJF-rt-QhA" firstAttribute="top" secondItem="Kvv-Ut-XsW" secondAttribute="bottom" constant="10" id="Q7B-58-E65"/>
+                            <constraint firstItem="Kvv-Ut-XsW" firstAttribute="leading" secondItem="6bW-Py-OjK" secondAttribute="leading" id="l35-rq-bIa"/>
+                            <constraint firstAttribute="trailing" secondItem="cJF-rt-QhA" secondAttribute="trailing" constant="20" id="lvE-q8-DBW"/>
+                            <constraint firstItem="6bW-Py-OjK" firstAttribute="bottom" secondItem="cJF-rt-QhA" secondAttribute="bottom" constant="10" id="p60-Jw-ilC"/>
+                            <constraint firstItem="cJF-rt-QhA" firstAttribute="leading" secondItem="1wY-D4-tX6" secondAttribute="leading" constant="20" id="zct-Uw-0Vh"/>
+                            <constraint firstItem="6bW-Py-OjK" firstAttribute="trailing" secondItem="Kvv-Ut-XsW" secondAttribute="trailing" id="ztj-I9-g2F"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="btnSubmit" destination="cJF-rt-QhA" id="bTX-e1-VuI"/>
+                        <outlet property="tableView" destination="Kvv-Ut-XsW" id="S0B-Bt-Dyq"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Gd-pl-6Of" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="811" y="-27"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="AppWhiteColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="HeaderGreenColor">
+            <color red="0.16099999845027924" green="0.54100000858306885" blue="0.50599998235702515" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="LableTittleColor">
+            <color red="0.16899999976158142" green="0.18799999356269836" blue="0.22699999809265137" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

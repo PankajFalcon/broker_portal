@@ -32,11 +32,9 @@ class DashboardVC: UIViewController {
         
         // Configure navigation bar
         configureNavigationBar(
-            title: AppTitle.Dashboard.rawValue,
-            leftAction: { self.popView() },isRightCustomImage: true) {
-                
-                
-            }
+            title: AppTitle.Dashboard.rawValue,leftImage: .menu,leftAction: {
+                SideMenuManager.shared.toggleMenu()
+            },isRightCustomImage: true)
         
         setupSearchTextField()
         
@@ -101,10 +99,9 @@ class DashboardVC: UIViewController {
     
     // MARK: - Button Actions
     @IBAction func activityOnPress(_ sender: UIButton) {
-        SideMenuManager.shared.toggleMenu()
-        //        Task{
-        //            await setupButtonStates(isActivitySelected: true)
-        //        }
+        Task{
+            await setupButtonStates(isActivitySelected: true)
+        }
     }
     
     @IBAction func policyOnPress(_ sender: UIButton) {
@@ -145,6 +142,7 @@ class DashboardVC: UIViewController {
         Task {
             
             viewModel.model?.insured_name = txtSearch.trim()
+            
             do {
                 let response = try await viewModel.getRecentActivity()
                 if viewModel.model?.page == 1 {
@@ -158,6 +156,7 @@ class DashboardVC: UIViewController {
                 }else{
                     viewModel.isLoading = true
                 }
+                tableView.setEmptyMessage("No recent activity found.", self.responseModel?.count ?? 0)
                 
                 self.tableView.refresh()
             } catch {
@@ -190,7 +189,7 @@ class DashboardVC: UIViewController {
                 }else{
                     viewModel.isLoading = true
                 }
-                tableView.setEmptyMessage(response?.message ?? "", self.responseModel?.count ?? 0)
+                tableView.setEmptyMessage("No policy found.", self.responseModel?.count ?? 0)
                 self.tableView.refresh()
             } catch {
                 // Handle error (e.g., show an alert)

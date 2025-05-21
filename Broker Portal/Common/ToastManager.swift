@@ -17,7 +17,7 @@ actor ToastManager {
         message: String,
         duration: TimeInterval = 2.0,
         font: UIFont = InterFontStyle.bold.with(size: 14),
-        backgroundColor: UIColor = UIColor.HeaderGreenColor,
+        backgroundColor: UIColor = UIColor.LableTittleColor,
         textColor: UIColor = .AppWhiteColor
     ) async {
         // Ensure only one toast at a time
@@ -49,11 +49,14 @@ actor ToastManager {
             
             // Constraints: top with padding, horizontal margin 20, height adjusts with content
             NSLayoutConstraint.activate([
-                toastLabel.topAnchor.constraint(equalTo: window.safeAreaLayoutGuide.topAnchor, constant: 20),
-                toastLabel.leadingAnchor.constraint(equalTo: window.leadingAnchor, constant: 20),
-                toastLabel.trailingAnchor.constraint(equalTo: window.trailingAnchor, constant: -20)
+                toastLabel.topAnchor.constraint(equalTo: window.safeAreaLayoutGuide.topAnchor, constant: 16),
+                toastLabel.leadingAnchor.constraint(greaterThanOrEqualTo: window.leadingAnchor, constant: 20),
+                toastLabel.trailingAnchor.constraint(lessThanOrEqualTo: window.trailingAnchor, constant: -20),
+                toastLabel.centerXAnchor.constraint(equalTo: window.centerXAnchor)
             ])
             
+            toastLabel.layoutIfNeeded()
+
             // Animate in and out
             UIView.animate(withDuration: 0.3, animations: {
                 toastLabel.alpha = 1.0
@@ -77,14 +80,23 @@ actor ToastManager {
 
 class PaddingLabel: UILabel {
     var padding = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
-    
+
     override func drawText(in rect: CGRect) {
-        super.drawText(in: rect.inset(by: padding))
+        let paddedRect = rect.inset(by: padding)
+        super.drawText(in: paddedRect)
     }
-    
+
     override var intrinsicContentSize: CGSize {
         let size = super.intrinsicContentSize
-        return CGSize(width: size.width + padding.left + padding.right,
-                      height: size.height + padding.top + padding.bottom)
+        let width = size.width + padding.left + padding.right
+        let height = size.height + padding.top + padding.bottom
+        return CGSize(width: width, height: height)
+    }
+
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        let newSize = super.sizeThatFits(size)
+        return CGSize(width: newSize.width + padding.left + padding.right,
+                      height: newSize.height + padding.top + padding.bottom)
     }
 }
+

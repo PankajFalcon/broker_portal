@@ -20,18 +20,101 @@ import UIKit
 
 enum AppTitle:String{
     case Dashboard = "Dashboard"
+    case Users = "Users"
+    case UserDetails = "User Details"
 }
 
-public extension UIViewController {
+enum AppIdentifire:String{
+    case DashboardVC = "DashboardVC"
+    case UsersVC = "UsersVC"
+    case MenuViewController = "MenuViewController"
+    case LoginVC = "LoginVC"
+}
+
+enum PopupMainTitle : String{
+    case Logout = "Logout"
+}
+
+enum PopupSubTitle: String{
+    case Logout = "Are you sure you want to logout?"
+}
+
+enum PopButtonTitle:String{
+    case OK = "Ok"
+    case Cancel = "Cancel"
+    case Yes = "Yes, Proceed"
+    case No = "No, Cancel"
+}
+
+extension UIViewController {
+    
+    func dictionaryFrom<T, V>(
+        array: [T],
+        keyPath: KeyPath<T, ConstantParam>,
+        valuePath: KeyPath<T, V?>
+    ) -> [String: Any] {
+        var dict: [String: Any] = [:]
+        for item in array {
+            let key = item[keyPath: keyPath].rawValue
+            if let value = item[keyPath: valuePath] {
+                dict[key] = value
+            }
+        }
+        return dict
+    }
+    
+    func areAllRequiredValuesPresent<T, V>(
+        in array: [T],
+        valuePath: KeyPath<T, V?>,
+        isRequiredPath: KeyPath<T, Bool?>
+    ) -> Bool where V: Collection {
+        for item in array {
+            let isRequired = item[keyPath: isRequiredPath]
+            
+            if isRequired == true{
+                guard let value = item[keyPath: valuePath], !value.isEmpty else {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
+    
+    func presentPopup(
+        from parentVC: UIViewController,
+        mainTitle: PopupMainTitle,
+        subTitle: PopupSubTitle,
+        btnOkTitle: PopButtonTitle,
+        btnCancelTitle: PopButtonTitle,
+        onOkPressed: @escaping () -> Void,
+        onCancelPressed: (() -> Void)? = nil
+    ) {
+        let popup = PopupView(nibName: "PopupView", bundle: nil)
+        popup.modalPresentationStyle = .overCurrentContext
+        popup.modalTransitionStyle = .crossDissolve
+
+        popup.mainTitle = mainTitle.rawValue
+        popup.subTitle = subTitle.rawValue
+        popup.btnOkTitle = btnOkTitle.rawValue
+        popup.btnCancelTitle = btnCancelTitle.rawValue
+
+        popup.onOkPressed = onOkPressed
+        popup.onCancelPressed = onCancelPressed
+
+        parentVC.present(popup, animated: true)
+    }
+
+
     
     /// Instantiate a view controller from a storyboard.
     /// - Parameters:
     ///   - storyboardName: The name of the storyboard file.
     ///   - identifier: The view controller's storyboard ID. If nil, the class name will be used.
     /// - Returns: An instantiated view controller of the expected type.
-    static func instantiate<T: UIViewController>(fromStoryboard storyboardName: AppStoryboard, identifier: String? = nil) -> T {
+    static func instantiate<T: UIViewController>(fromStoryboard storyboardName: AppStoryboard, identifier: AppIdentifire? = nil) -> T {
         let storyboard = UIStoryboard(name: storyboardName.rawValue, bundle: nil)
-        let id = identifier ?? String(describing: T.self)
+        let id = identifier?.rawValue ?? String(describing: T.self)
         
         guard let viewController = storyboard.instantiateViewController(withIdentifier: id) as? T else {
             fatalError("❌ ViewController with identifier \(id) not found in \(storyboardName) storyboard.")
@@ -40,24 +123,27 @@ public extension UIViewController {
     }
     
     /// Push a view controller from storyboard onto the current navigation stack
-    func push<T: UIViewController>(_ type: T.Type, from storyboard: AppStoryboard, setup: ((T) -> Void)? = nil) {
+    public func push<T: UIViewController>(_ type: T.Type, from storyboard: AppStoryboard, setup: ((T) -> Void)? = nil) {
         let vc = T.instantiate(from: storyboard)
         setup?(vc)
         
-        guard let navigationController = self.navigationController else {
-            debugPrint("NavigationController not found. Make sure this view controller is embedded in a UINavigationController.")
-            return
+        if let nav = UIApplication.topNavigationController() {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            guard let navigationController = self.navigationController else {
+                debugPrint("NavigationController not found. Make sure this view controller is embedded in a UINavigationController.")
+                return
+            }
+            navigationController.pushViewController(vc, animated: true)
         }
-        
-        navigationController.pushViewController(vc, animated: true)
     }
     
-    func popView(){
+    public func popView(){
         navigationController?.popViewController(animated: true)
     }
     
     /// Present a view controller from storyboard onto the current navigation stack
-    func present<T: UIViewController>(_ type: T.Type, from storyboard: AppStoryboard, setup: ((T) -> Void)? = nil) {
+    public func present<T: UIViewController>(_ type: T.Type, from storyboard: AppStoryboard, setup: ((T) -> Void)? = nil) {
         let vc = T.instantiate(from: storyboard)
         setup?(vc)
         vc.modalPresentationStyle = .overFullScreen
@@ -91,12 +177,20 @@ extension UIViewController {
             })
         ]
         
-        // Add "Change Agency" only if agencyID is 41
         if agencyID == 41 {
             actions.append(
                 .init(title: "Change Agency", type: .default, handler: {
-                    self.present(SelectAgencyVC.self, from: .main) { vc in
-                        // Configure VC if needed
+                    Task {
+                        self.present(SelectAgencyVC.self, from: .main) { vc in
+                            vc.saveAgency = {
+                                Task {
+                                    if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                       let sceneDelegate = scene.delegate as? SceneDelegate {
+                                        await sceneDelegate.setRoot()
+                                    }
+                                }
+                            }
+                        }
                     }
                 })
             )
@@ -104,21 +198,38 @@ extension UIViewController {
         
         actions.append(contentsOf: [
             .init(title: "Logout", type: .destructive, handler: {
-                print("Logout tapped")
+                self.presentPopup(from: self, mainTitle: .Logout, subTitle: .Logout, btnOkTitle: .Yes, btnCancelTitle: .No) {
+                    Task {
+                        await UserDefaultsManager.shared.clearAll()
+                        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let sceneDelegate = scene.delegate as? SceneDelegate {
+                            await sceneDelegate.setRoot()
+                        }
+                    }
+                }
+                
             }),
             .init(title: "Cancel", type: .cancel, handler: nil)
         ])
         
-        Task{
+        // Run the async title setup inside Task
+        Task {
+            let firstName = await UserDefaultsManager.shared.fatchCurentUser()?.firstName ?? ""
+            let lastName = await UserDefaultsManager.shared.fatchCurentUser()?.lastName ?? ""
+            let agencyName = await UserDefaultsManager.shared.getSelectedAgency()?.name ?? ""
+            
+            let title = agencyID == 41 ? "\(firstName) \(lastName)\n\(agencyName)" : "\(firstName) \(lastName)"
+            
             ActionSheetHelper.showActionSheet(
                 on: self,
-                title: agencyID == 41 ? "\(await UserDefaultsManager.shared.fatchCurentUser()?.firstName ?? "") \(await UserDefaultsManager.shared.fatchCurentUser()?.lastName ?? "")\n\(await UserDefaultsManager.shared.getSelectedAgency()?.name ?? "")" : "\(await UserDefaultsManager.shared.fatchCurentUser()?.firstName ?? "") \(await UserDefaultsManager.shared.fatchCurentUser()?.lastName ?? "")",
+                title: title,
                 message: "Please select an action",
                 actions: actions,
                 sourceView: self.view
             )
         }
     }
+    
     
     
     func configureNavigationBar(
@@ -130,32 +241,71 @@ extension UIViewController {
         rightTitle: String? = nil,
         rightImage: Icon? = nil,
         rightCustomImage: UIImage? = nil,
-        isRightCustomImage:Bool? = false,
+        isRightCustomImage: Bool = false,
         rightAction: (() -> Void)? = nil
     ) {
         self.title = title
-        
+
+        // MARK: - Configure Modern Navigation Bar Appearance (Swift 6)
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .HeaderGreenColor
+        appearance.titleTextAttributes = [
+            .foregroundColor: UIColor.white,
+            .font: UIFont.systemFont(ofSize: 17, weight: .semibold)
+        ]
+        appearance.largeTitleTextAttributes = [
+            .foregroundColor: UIColor.white,
+            .font: UIFont.systemFont(ofSize: 34, weight: .bold)
+        ]
+
+        guard let navigationBar = navigationController?.navigationBar else { return }
+        navigationBar.standardAppearance = appearance
+        navigationBar.scrollEdgeAppearance = appearance
+        navigationBar.compactAppearance = appearance
+        navigationBar.tintColor = .white // Optional: sets bar button item color
+
+        // MARK: - Left Bar Button Item
         navigationItem.leftBarButtonItem = createBarButtonItem(
             title: leftTitle,
             image: leftImage?.image,
             customImage: leftCustomImage,
             action: leftAction
         )
-        
-        Task{
+
+        // MARK: - Right Bar Button Item
+        Task {
+            let customImage: UIImage? = await {
+                if isRightCustomImage {
+                    if let image = rightCustomImage {
+                        return image
+                    } else {
+                        let user = await UserDefaultsManager.shared.fatchCurentUser()
+                        return await UserImageGenerator.generateProfileImage(
+                            imageURLString: user?.image ?? "",
+                            firstName: user?.firstName ?? "",
+                            lastName: user?.lastName ?? ""
+                        )
+                    }
+                }
+                return nil
+            }()
+
             navigationItem.rightBarButtonItem = createBarButtonItem(
                 title: rightTitle,
                 image: rightImage?.image,
-                customImage: isRightCustomImage == true ? rightCustomImage == nil ? await UserImageGenerator.generateProfileImage(imageURLString: UserDefaultsManager.shared.fatchCurentUser()?.image ?? "", firstName: UserDefaultsManager.shared.fatchCurentUser()?.firstName ?? "", lastName: UserDefaultsManager.shared.fatchCurentUser()?.lastName ?? "") : rightCustomImage : nil,
+                customImage: customImage,
+                isRightCustomImage: isRightCustomImage,
                 action: rightAction
             )
         }
     }
+
     
     private func createBarButtonItem(
         title: String?,
         image: UIImage?,
-        customImage: UIImage?,
+        customImage: UIImage?,isRightCustomImage :Bool?=false,
         action: (() -> Void)?
     ) -> UIBarButtonItem? {
         if let customImage = customImage {
@@ -169,11 +319,15 @@ extension UIViewController {
             button.clipsToBounds = true
             button.isUserInteractionEnabled = true
             
-            if action != nil {
+            if action != nil || isRightCustomImage == true{
                 button.addAction(UIAction { _ in
                     //                     action()
-                    Task{
-                        await self.actionSheet(agencyID: UserDefaultsManager.shared.fatchCurentUser()?.userTypeId ?? 0)
+                    if isRightCustomImage == true{
+                        Task{
+                            await self.actionSheet(agencyID: UserDefaultsManager.shared.fatchCurentUser()?.userTypeId ?? 0)
+                        }
+                    }else{
+                        //                        action()
                     }
                 }, for: .touchUpInside)
             }

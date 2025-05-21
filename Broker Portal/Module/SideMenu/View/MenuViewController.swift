@@ -47,6 +47,12 @@ final class MenuViewController: UIViewController {
         setupTableView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        selectedIndex = nil
+        tableView.refresh()
+    }
+    
     private func setupTableView(){
         tableView.delegate = self
         tableView.dataSource = self
@@ -145,6 +151,15 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         debugPrint("section : \(indexPath.section) , indexPath : \(indexPath.row)")
+        let subtitle = sideMenuItems[indexPath.section].subtitle[indexPath.row]
+        SideMenuManager.shared.sideMenuController?.toggleMenu(forceOpen: false)
+        switch subtitle{
+        case "User Admin" :
+            let vc = UsersVC.instantiate(fromStoryboard: .admin,identifier: .UsersVC)
+            SideMenuManager.shared.setRootViewController(vc)
+        default:
+            break
+        }
     }
     
 }

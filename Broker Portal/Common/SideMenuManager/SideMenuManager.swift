@@ -75,7 +75,7 @@ class SideMenuController: UIViewController {
     }
     
     func setRootViewController(_ vc: UIViewController) {
-        mainNavigationController.setViewControllers([vc], animated: false)
+        mainNavigationController.pushViewController(vc, animated: true)// setViewControllers([vc], animated: false)
         toggleMenu(forceOpen: false)
     }
     
@@ -86,18 +86,16 @@ class SideMenuController: UIViewController {
 
 extension SideMenuController: MenuViewControllerDelegate {
     func didSelect(menuItem: SideMenuItemType) {
-        //        switch menuItem {
-        //        case .home:
-        //            //            let vc = HomeViewController()
-        //            //            SideMenuManager.shared.setRootViewController(vc)
-        //            return
-        //        case .second:
-        //            //            let vc = SecondViewController()
-        //            //            SideMenuManager.shared.setRootViewController(vc)
-        //            return
-        //        case .logout:
-        //            print("Logout tapped")
-        //        }
+        switch menuItem {
+        case .general:
+            break
+        case .professional:
+            break
+        case .trucking:
+            break
+        case .other:
+            break
+        }
     }
 }
 

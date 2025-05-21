@@ -9,7 +9,7 @@ import UIKit
 
 class ActivityAndPolicyXIB: UITableViewCell {
     
-    @IBOutlet weak var lblStatus: UILabel!
+     @IBOutlet weak var lblStatus: UILabel!
     @IBOutlet weak var lblPremium: UILabel!
     @IBOutlet weak var lblDate: UILabel!
     @IBOutlet weak var lblQuoteNo: UILabel!

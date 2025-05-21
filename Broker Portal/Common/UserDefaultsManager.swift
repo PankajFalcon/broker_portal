@@ -14,6 +14,7 @@ struct UserDefaultsKey{
 }
 
 actor UserDefaultsManager {
+    
     static let shared = UserDefaultsManager()
     private let defaults = UserDefaults.standard
 
@@ -51,6 +52,7 @@ actor UserDefaultsManager {
         for key in defaults.dictionaryRepresentation().keys {
             defaults.removeObject(forKey: key)
         }
+        defaults.synchronize()
     }
     
     func getSelectedAgency() async -> AgencyModelResponseData?{
@@ -60,32 +62,13 @@ actor UserDefaultsManager {
     func fatchCurentUser() async -> UserModel?{
         return await UserDefaultsManager.shared.get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?.decodedUser
     }
+ 
+    func getAgencyID() async -> Int{
+        let selectedAgency = await UserDefaultsManager.shared.getSelectedAgency()
+        let currentUser = await UserDefaultsManager.shared.fatchCurentUser()
+
+        let agencyID = selectedAgency?.agencyID ?? currentUser?.agencyId ?? 0
+        return agencyID
+    }
     
 }
-
-//MARK: How to use this class
-
-//// Saving a codable model
-//struct User: Codable {
-//    let id: Int
-//    let name: String
-//}
-//
-//let user = User(id: 1, name: "Alice")
-//await UserDefaultsManager.shared.set(user, forKey: "loggedInUser")
-//
-//// Getting a codable model
-//if let savedUser = await UserDefaultsManager.shared.get(User.self, forKey: "loggedInUser") {
-//    print(savedUser.name)
-//}
-//
-//// Saving a single value
-//await UserDefaultsManager.shared.set(true, forKey: "isLoggedIn")
-//
-//// Getting a single value
-//if let isLoggedIn: Bool = await UserDefaultsManager.shared.get(Bool.self, forKey: "isLoggedIn") {
-//    print(isLoggedIn)
-//}
-//
-//// Clearing all data
-//await UserDefaultsManager.shared.clearAll()

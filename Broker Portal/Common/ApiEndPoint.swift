@@ -22,9 +22,13 @@ enum APIConstants{
     
     static var userlogin: URL? { url("/adminop/userlogin") }
     static var refreshToken: URL? { url("/adminop/get-refresh-token") }
-    static var brokerList: URL? { urlAcc("/accounting/broker/get") }
     static var recentActivity: URL? { url("/quoteop/get_quotes_for_broker_recent_activity") }
     static var getPolicy: URL? { url("/quoteop/get-all-policy-data-paginated") }
+    
+    static var brokerList: URL? { urlAcc("/accounting/broker/get") }
+    static func brokerUserList(_ id: Int)-> URL? { urlAcc("accounting/user/get?agency_id=\(id)") }
+    static func updateUser(_ id: Int)-> URL? { urlAcc("/accounting/user/update/\(id)") }
+    static var addUser: URL? { urlAcc("/accounting/user/add") }
     
     private static func url(_ path: String) -> URL? {
         URL(string: baseURL + version + path)

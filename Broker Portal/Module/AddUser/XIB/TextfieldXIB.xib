@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="TextfieldXIB" rowHeight="137" id="KGk-i7-Jjw" customClass="TextfieldXIB" customModule="Broker_Portal" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="467" height="137"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="467" height="137"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Frk-7T-8Ih">
+                        <rect key="frame" x="19.999999999999996" y="10" width="58.666666666666657" height="14"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                        <color key="textColor" name="LableTittleColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Eg: Johne" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hlV-iv-e9K">
+                        <rect key="frame" x="20" y="30" width="427" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="yja-Tk-rhZ"/>
+                        </constraints>
+                        <color key="textColor" name="LableTittleColor"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
+                        <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                    </textField>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fAO-2Z-yRx">
+                        <rect key="frame" x="20" y="74" width="427" height="0.0"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                        <color key="textColor" red="1" green="0.1096990776" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="fAO-2Z-yRx" firstAttribute="leading" secondItem="hlV-iv-e9K" secondAttribute="leading" id="1tA-7V-iBK"/>
+                    <constraint firstItem="Frk-7T-8Ih" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="Egg-9o-wtT"/>
+                    <constraint firstAttribute="trailing" secondItem="hlV-iv-e9K" secondAttribute="trailing" constant="20" id="JTW-lg-jzz"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="fAO-2Z-yRx" secondAttribute="bottom" constant="4" id="LOH-YL-rU9"/>
+                    <constraint firstItem="fAO-2Z-yRx" firstAttribute="trailing" secondItem="hlV-iv-e9K" secondAttribute="trailing" id="QHU-Jn-aUD"/>
+                    <constraint firstItem="hlV-iv-e9K" firstAttribute="top" secondItem="Frk-7T-8Ih" secondAttribute="bottom" constant="6" id="TSd-jh-2P9"/>
+                    <constraint firstItem="fAO-2Z-yRx" firstAttribute="top" secondItem="hlV-iv-e9K" secondAttribute="bottom" constant="4" id="dWU-vf-O5K"/>
+                    <constraint firstItem="hlV-iv-e9K" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="kRt-cO-eqn"/>
+                    <constraint firstItem="Frk-7T-8Ih" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="vfd-D6-GSl"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" name="AppWhiteColor"/>
+            <connections>
+                <outlet property="lblErrorMessage" destination="fAO-2Z-yRx" id="dD2-Sg-Gjj"/>
+                <outlet property="lblTitle" destination="Frk-7T-8Ih" id="zLQ-UM-qyK"/>
+                <outlet property="txtField" destination="hlV-iv-e9K" id="rHb-RX-pTm"/>
+            </connections>
+            <point key="canvasLocation" x="241.98473282442748" y="21.47887323943662"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <namedColor name="AppWhiteColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="LableTittleColor">
+            <color red="0.16899999976158142" green="0.18799999356269836" blue="0.22699999809265137" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

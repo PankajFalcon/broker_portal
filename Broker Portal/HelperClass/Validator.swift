@@ -9,6 +9,35 @@ import Foundation
 
 public struct Validator {
     
+    static func format(_ digits: String) -> String {
+        let numbersOnly = String(digits.prefix(10))
+        
+        let areaCode = numbersOnly.prefix(3)
+        let middle = numbersOnly.dropFirst(3).prefix(3)
+        let last = numbersOnly.dropFirst(6)
+        
+        var formatted = ""
+        
+        // Always add opening parenthesis if any digits
+        if !areaCode.isEmpty {
+            formatted += "(" + areaCode
+            // Only add closing ')' if area code is full and more digits exist
+            if areaCode.count == 3 && !middle.isEmpty {
+                formatted += ")"
+            }
+        }
+        
+        if !middle.isEmpty {
+            formatted += " " + middle
+        }
+        
+        if !last.isEmpty {
+            formatted += " " + last
+        }
+        
+        return formatted
+    }
+    
     // MARK: - Email Validation
     public static func isValidEmail(_ email: String) -> Bool {
         let emailRegex = #"^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"#

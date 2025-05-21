@@ -28,8 +28,7 @@ final class AuthHandler {
             }
             
             // Initialize Login screen
-            let loginVC: LoginVC = LoginVC.instantiate(fromStoryboard: .main)
-
+            let loginVC: LoginVC = LoginVC.instantiate(fromStoryboard: .main,identifier: .LoginVC)
             let navigationController = UINavigationController(rootViewController: loginVC)
             navigationController.modalPresentationStyle = .fullScreen
             

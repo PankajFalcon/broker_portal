@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Inter-Medium.otf">
+            <string>Inter-Medium</string>
+        </array>
+        <array key="Inter-Regular.otf">
+            <string>Inter-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="BrokerUserXIB" rowHeight="320" id="KGk-i7-Jjw" customClass="BrokerUserXIB" customModule="Broker_Portal" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="557" height="320"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="557" height="320"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vrx-Az-L2l">
+                        <rect key="frame" x="20" y="10" width="517" height="300"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NAME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rni-TN-CbF">
+                                <rect key="frame" x="10" y="10" width="41.333333333333336" height="17"/>
+                                <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
+                                <color key="textColor" name="LableSubTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Company Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m5f-fo-hXI">
+                                <rect key="frame" x="10.000000000000007" y="31" width="121.66666666666669" height="19.333333333333329"/>
+                                <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
+                                <color key="textColor" name="LableTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AGENCY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WaU-5s-cyx">
+                                <rect key="frame" x="449" y="10" width="58" height="17"/>
+                                <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
+                                <color key="textColor" name="LableSubTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Started" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XZm-VS-RlJ">
+                                <rect key="frame" x="449.66666666666669" y="31" width="57.333333333333314" height="19.333333333333329"/>
+                                <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
+                                <color key="textColor" name="LableTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EMAIL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vx7-4Z-0rs">
+                                <rect key="frame" x="10" y="56.333333333333329" width="42.333333333333336" height="17"/>
+                                <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
+                                <color key="textColor" name="LableSubTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1058894" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mw2-PZ-3Rz">
+                                <rect key="frame" x="10" y="77.333333333333329" width="497" height="19.333333333333329"/>
+                                <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
+                                <color key="textColor" name="LableTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="STATE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O3Y-on-B48">
+                                <rect key="frame" x="10" y="102.66666666666667" width="42.666666666666664" height="17"/>
+                                <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
+                                <color key="textColor" name="LableSubTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="04/25/2025" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0wX-vD-gCK">
+                                <rect key="frame" x="10" y="123.66666666666664" width="92.333333333333329" height="19.333333333333329"/>
+                                <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
+                                <color key="textColor" name="LableTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J3e-1l-e5c">
+                                <rect key="frame" x="10" y="149" width="84" height="17"/>
+                                <string key="text">USER TYPE	</string>
+                                <fontDescription key="fontDescription" name="Inter-Regular" family="Inter" pointSize="14"/>
+                                <color key="textColor" name="LableSubTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="04/25/2025" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="72K-60-tbF">
+                                <rect key="frame" x="10" y="170" width="92.333333333333329" height="19.333333333333343"/>
+                                <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="16"/>
+                                <color key="textColor" name="LableTittleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="D1q-Qy-hOo">
+                                <rect key="frame" x="405" y="159.33333333333334" width="102" height="30"/>
+                                <subviews>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gy6-z1-YiG">
+                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                        <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="qhr-7N-OUU"/>
+                                            <constraint firstAttribute="width" constant="30" id="vZZ-pc-not"/>
+                                        </constraints>
+                                        <color key="tintColor" name="LableTittleColor"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="pencil" catalog="system"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="4"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FXy-hE-Gkp">
+                                        <rect key="frame" x="36" y="0.0" width="30" height="30"/>
+                                        <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="JVe-UH-JKz"/>
+                                            <constraint firstAttribute="height" constant="30" id="NXo-G3-2Nr"/>
+                                        </constraints>
+                                        <color key="tintColor" name="LableTittleColor"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="eye" catalog="system"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="4"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kMw-uM-W1V">
+                                        <rect key="frame" x="72" y="0.0" width="30" height="30"/>
+                                        <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="FLS-Qe-FvB"/>
+                                            <constraint firstAttribute="width" constant="30" id="vm5-26-GcD"/>
+                                        </constraints>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="ic_white_cross"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="4"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                </subviews>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" name="AppWhiteColor"/>
+                        <constraints>
+                            <constraint firstItem="WaU-5s-cyx" firstAttribute="top" secondItem="Vrx-Az-L2l" secondAttribute="top" constant="10" id="0An-4l-hW9"/>
+                            <constraint firstItem="72K-60-tbF" firstAttribute="leading" secondItem="J3e-1l-e5c" secondAttribute="leading" id="9yV-3n-YUH"/>
+                            <constraint firstItem="72K-60-tbF" firstAttribute="top" secondItem="J3e-1l-e5c" secondAttribute="bottom" constant="4" id="A6l-Cq-g36"/>
+                            <constraint firstItem="XZm-VS-RlJ" firstAttribute="top" secondItem="WaU-5s-cyx" secondAttribute="bottom" constant="4" id="G5W-fd-anI"/>
+                            <constraint firstItem="J3e-1l-e5c" firstAttribute="leading" secondItem="Vrx-Az-L2l" secondAttribute="leading" constant="10" id="I77-kF-bcz"/>
+                            <constraint firstItem="J3e-1l-e5c" firstAttribute="top" secondItem="0wX-vD-gCK" secondAttribute="bottom" constant="6" id="IQq-yF-VqW"/>
+                            <constraint firstAttribute="trailing" secondItem="XZm-VS-RlJ" secondAttribute="trailing" constant="10" id="IzE-q2-P16"/>
+                            <constraint firstItem="0wX-vD-gCK" firstAttribute="leading" secondItem="O3Y-on-B48" secondAttribute="leading" id="KLL-hJ-xdF"/>
+                            <constraint firstItem="rni-TN-CbF" firstAttribute="leading" secondItem="Vrx-Az-L2l" secondAttribute="leading" constant="10" id="NnC-Sk-19D"/>
+                            <constraint firstAttribute="trailing" secondItem="WaU-5s-cyx" secondAttribute="trailing" constant="10" id="WBF-uQ-we3"/>
+                            <constraint firstItem="D1q-Qy-hOo" firstAttribute="bottom" secondItem="72K-60-tbF" secondAttribute="bottom" id="YFK-b4-4eB"/>
+                            <constraint firstItem="Mw2-PZ-3Rz" firstAttribute="leading" secondItem="Vrx-Az-L2l" secondAttribute="leading" constant="10" id="bDw-tO-qJP"/>
+                            <constraint firstItem="Mw2-PZ-3Rz" firstAttribute="top" secondItem="vx7-4Z-0rs" secondAttribute="bottom" constant="4" id="bkS-cU-ywb"/>
+                            <constraint firstItem="D1q-Qy-hOo" firstAttribute="trailing" secondItem="XZm-VS-RlJ" secondAttribute="trailing" id="dNY-ZR-LdG"/>
+                            <constraint firstItem="O3Y-on-B48" firstAttribute="top" secondItem="Mw2-PZ-3Rz" secondAttribute="bottom" constant="6" id="dxP-Ai-GVi"/>
+                            <constraint firstItem="O3Y-on-B48" firstAttribute="leading" secondItem="Vrx-Az-L2l" secondAttribute="leading" constant="10" id="etI-UV-btn"/>
+                            <constraint firstItem="vx7-4Z-0rs" firstAttribute="top" secondItem="m5f-fo-hXI" secondAttribute="bottom" constant="6" id="gfe-DP-bpB"/>
+                            <constraint firstItem="m5f-fo-hXI" firstAttribute="leading" secondItem="Vrx-Az-L2l" secondAttribute="leading" constant="10" id="hgk-5v-XfE"/>
+                            <constraint firstItem="Mw2-PZ-3Rz" firstAttribute="trailing" secondItem="XZm-VS-RlJ" secondAttribute="trailing" id="lXZ-Fl-0um"/>
+                            <constraint firstItem="vx7-4Z-0rs" firstAttribute="leading" secondItem="Vrx-Az-L2l" secondAttribute="leading" constant="10" id="mSG-oY-rVx"/>
+                            <constraint firstItem="m5f-fo-hXI" firstAttribute="top" secondItem="rni-TN-CbF" secondAttribute="bottom" constant="4" id="oYr-IO-uc7"/>
+                            <constraint firstItem="rni-TN-CbF" firstAttribute="top" secondItem="Vrx-Az-L2l" secondAttribute="top" constant="10" id="ran-vT-c6p"/>
+                            <constraint firstItem="0wX-vD-gCK" firstAttribute="top" secondItem="O3Y-on-B48" secondAttribute="bottom" constant="4" id="v7a-aH-7AR"/>
+                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="72K-60-tbF" secondAttribute="bottom" constant="10" id="w8T-7p-MGr"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="10"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                <color key="value" name="LableTittleColor"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                                <real key="value" value="0.5"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
+                                <size key="value" width="0.0" height="0.0"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                                <real key="value" value="5"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="Vrx-Az-L2l" secondAttribute="bottom" constant="10" id="KrB-jn-0dA"/>
+                    <constraint firstAttribute="trailing" secondItem="Vrx-Az-L2l" secondAttribute="trailing" constant="20" id="PDe-aN-90j"/>
+                    <constraint firstItem="Vrx-Az-L2l" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="l1h-i2-DUj"/>
+                    <constraint firstItem="Vrx-Az-L2l" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="nLl-FW-aa3"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" name="AppWhiteColor"/>
+            <connections>
+                <outlet property="btnActive" destination="kMw-uM-W1V" id="w4O-vt-Yws"/>
+                <outlet property="btnChangePassword" destination="FXy-hE-Gkp" id="zgQ-jZ-Cfh"/>
+                <outlet property="btnEdit" destination="gy6-z1-YiG" id="gx2-qa-Nsq"/>
+                <outlet property="containerView" destination="Vrx-Az-L2l" id="EgF-Ct-byc"/>
+                <outlet property="lblAgency" destination="XZm-VS-RlJ" id="kH4-bl-nKR"/>
+                <outlet property="lblEmail" destination="Mw2-PZ-3Rz" id="uIx-bv-Ktu"/>
+                <outlet property="lblName" destination="m5f-fo-hXI" id="hDA-qe-uRt"/>
+                <outlet property="lblState" destination="0wX-vD-gCK" id="HHY-qN-4eO"/>
+                <outlet property="lblUserType" destination="72K-60-tbF" id="NGX-kQ-WzZ"/>
+            </connections>
+            <point key="canvasLocation" x="309.16030534351142" y="85.91549295774648"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="eye" catalog="system" width="128" height="79"/>
+        <image name="ic_white_cross" width="13" height="12"/>
+        <image name="pencil" catalog="system" width="128" height="113"/>
+        <namedColor name="AppWhiteColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="LableSubTittleColor">
+            <color red="0.32899999618530273" green="0.3449999988079071" blue="0.37999999523162842" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="LableTittleColor">
+            <color red="0.16899999976158142" green="0.18799999356269836" blue="0.22699999809265137" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

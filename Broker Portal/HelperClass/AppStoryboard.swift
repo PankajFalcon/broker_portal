@@ -11,6 +11,7 @@ import UIKit
 public enum AppStoryboard: String {
     case main = "Main"
     case auth = "Auth"
+    case admin = "Admin"
     case dashboard = "Dashboard"
     case onboarding = "Onboarding"
     

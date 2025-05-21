@@ -55,30 +55,33 @@ final class DropdownView: UIView {
     }
     
     func show(from view: UIView, data: [String], onSelect: @escaping (String) -> Void) {
-        guard let window = view.window else { return }
         
-        self.items = data
-        self.selectionHandler = onSelect
-        self.anchorView = view
-        
-        if superview != nil {
-            removeFromSuperview()
-            backgroundTapView?.removeFromSuperview()
+        // Add a small delay to ensure keyboard has time to dismiss
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            guard let window = view.window else { return }
+            
+            self.items = data
+            self.selectionHandler = onSelect
+            self.anchorView = view
+            
+            if self.superview != nil {
+                self.removeFromSuperview()
+                self.backgroundTapView?.removeFromSuperview()
+            }
+            
+            // Add tap-detecting background
+            let tapView = UIView(frame: window.bounds)
+            tapView.backgroundColor = .clear
+            window.addSubview(tapView)
+            self.backgroundTapView = tapView
+            
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismiss(_:)))
+            tapView.addGestureRecognizer(tapGesture)
+            tapGesture.cancelsTouchesInView = false
+            
+            tapView.addSubview(self)
+            self.reloadAndPositionDropdown()
         }
-        
-        // Add tap-detecting background
-        let tapView = UIView(frame: window.bounds)
-        tapView.backgroundColor = .clear
-        window.addSubview(tapView)
-        backgroundTapView = tapView
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismiss(_:)))
-        tapView.addGestureRecognizer(tapGesture)
-        tapGesture.cancelsTouchesInView = false
-
-        
-        tapView.addSubview(self)
-        reloadAndPositionDropdown()
     }
     
     private func reloadAndPositionDropdown() {
@@ -114,11 +117,12 @@ final class DropdownView: UIView {
     @objc private func dismiss(_ sender: UITapGestureRecognizer) {
         let location = sender.location(in: backgroundTapView)
         if !self.frame.contains(location) {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             backgroundTapView?.removeFromSuperview()
             removeFromSuperview()
         }
     }
-
+    
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource

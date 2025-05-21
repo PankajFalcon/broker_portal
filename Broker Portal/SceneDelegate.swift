@@ -23,30 +23,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func createSideMenu(rootVC: UIViewController) {
-        let menuVC : MenuViewController = MenuViewController.instantiate(fromStoryboard: .main, identifier: "MenuViewController")
+        let menuVC : MenuViewController = MenuViewController.instantiate(fromStoryboard: .main,identifier: .MenuViewController)
         
         guard let window = self.window else { return }
         
         SideMenuManager.shared.setup(menu: menuVC, root: rootVC, in: window)
     }
     
-     func setRoot() async {
-        let accessToken = await UserDefaultsManager.shared
-            .get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?
-            .accessToken?
-            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    func setRoot() async {
+        // Fetch and clean access token
+        let loginModel = await UserDefaultsManager.shared.get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)
+        let accessToken = loginModel?.accessToken?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         
-        let rootViewController: UIViewController
-        
-        if accessToken.isEmpty {
-            rootViewController = LoginVC.instantiate(fromStoryboard: .main, identifier: "LoginVC")
-        } else {
-            rootViewController = DashboardVC.instantiate(fromStoryboard: .dashboard, identifier: "DashboardVC")
+        // Determine root VC based on login state
+        guard !accessToken.isEmpty else {
+            createSideMenu(rootVC: LoginVC.instantiate(fromStoryboard: .main,identifier: .LoginVC))
+            return
         }
         
-        createSideMenu(rootVC: rootViewController)
+        let userTypeId = await UserDefaultsManager.shared.fatchCurentUser()?.userTypeId ?? 0
+        let agencyID = await UserDefaultsManager.shared.getAgencyID()
+        
+        if userTypeId == 41 && agencyID == 0 {
+            await UserDefaultsManager.shared.clearAll()
+            createSideMenu(rootVC: LoginVC.instantiate(fromStoryboard: .main,identifier: .LoginVC))
+            return
+        }
+        
+        createSideMenu(rootVC: DashboardVC.instantiate(fromStoryboard: .dashboard,identifier: .DashboardVC))
     }
-    
     
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

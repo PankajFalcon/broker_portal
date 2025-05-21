@@ -72,3 +72,67 @@ public extension UITextField {
         layer.add(animation, forKey: "shake")
     }
 }
+
+final class PhoneTextFieldDelegate: NSObject, UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let currentText = textField.text,
+              let textRange = Range(range, in: currentText)
+        else {
+            return false
+        }
+        
+        let updatedText = currentText.replacingCharacters(in: textRange, with: string)
+        let digits = updatedText.filter(\.isNumber)
+        let formatted = Validator.format(digits)
+        
+        textField.text = formatted
+        
+        // Move cursor to end (optional)
+        let endPosition = textField.endOfDocument
+        textField.selectedTextRange = textField.textRange(from: endPosition, to: endPosition)
+        
+        return false // prevent default system behavior
+    }
+}
+
+
+//MARK: This Code use for disable Past Functionality
+
+final class PasteBlocker {
+    static func disablePasteGlobally() {
+        UITextField.swizzleCanPerformAction()
+        UITextView.swizzleCanPerformAction()
+    }
+}
+
+
+extension UITextField {
+    static func swizzleCanPerformAction() {
+        guard let original = class_getInstanceMethod(self, #selector(canPerformAction(_:withSender:))),
+              let swizzled = class_getInstanceMethod(self, #selector(swizzled_canPerformAction(_:withSender:))) else { return }
+        method_exchangeImplementations(original, swizzled)
+    }
+
+    @objc func swizzled_canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == #selector(paste(_:)) || action == #selector(copy(_:)) || action == #selector(cut(_:)) || action == #selector(select(_:)) || action == #selector(selectAll(_:)) {
+            return false
+        }
+        return swizzled_canPerformAction(action, withSender: sender)
+    }
+}
+
+extension UITextView {
+    static func swizzleCanPerformAction() {
+        guard let original = class_getInstanceMethod(self, #selector(canPerformAction(_:withSender:))),
+              let swizzled = class_getInstanceMethod(self, #selector(swizzled_canPerformAction(_:withSender:))) else { return }
+        method_exchangeImplementations(original, swizzled)
+    }
+
+    @objc func swizzled_canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == #selector(paste(_:)) || action == #selector(copy(_:)) || action == #selector(cut(_:)) || action == #selector(select(_:)) || action == #selector(selectAll(_:)) {
+            return false
+        }
+        return swizzled_canPerformAction(action, withSender: sender)
+    }
+}

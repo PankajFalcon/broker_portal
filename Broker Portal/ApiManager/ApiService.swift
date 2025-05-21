@@ -17,7 +17,7 @@ public enum HTTPMethod: String {
 
 public enum APIRequest {
     case getRequest(url: URL, headers: [String: Any]?)
-    case postRequest(url: URL, body: Data?, headers: [String: Any]?)
+    case postRequest(url: URL, body: Data?,method:HTTPMethod = .post, headers: [String: Any]?)
     case uploadMultipart(url: URL, parameters: [String: Any], files: [File], headers: [String: Any]?)
     case restRequest(url: URL, method: HTTPMethod, body: Data?, headers: [String: Any]?)
     
@@ -30,6 +30,7 @@ public enum APIRequest {
 
 // MARK: - API Errors
 enum APIError: Error,LocalizedError {
+    
     case networkUnavailable
     case invalidResponse
     case networkError(String)
@@ -41,6 +42,7 @@ enum APIError: Error,LocalizedError {
     case clientError
     case notFound
     case authenticationFailed
+    case defaultMessage(String)
     
     var errorMessage: String {
         switch self {
@@ -66,6 +68,8 @@ enum APIError: Error,LocalizedError {
             return "The requested resource could not be found. Please verify the URL and try again."
         case .authenticationFailed:
             return "Your login session has timed out. Please sign in again."
+        case .defaultMessage(let message):
+            return message
         }
     }
     // ✅ Override `LocalizedError`'s `errorDescription` to return `errorMessage`
@@ -86,6 +90,7 @@ public actor APIManager {
     private var pendingRequests: [APIRequest] = []
     var progressHandler: ((APIRequest.File, Double) -> Void)?
     private let userDefaults = UserDefaults.standard
+    private let loaderManager = LoaderManager()
     
     private init() {
         let config = URLSessionConfiguration.default
@@ -131,8 +136,11 @@ public actor APIManager {
     }
     
     /// 📌 Handle API Requests with Offline Support
-    public func handleRequest(_ request: APIRequest, progress: ((APIRequest.File, Double) -> Void)? = nil) async throws -> Data {
+    public func handleRequest(_ request: APIRequest,isloaderHide:Bool?=true, progress: ((APIRequest.File, Double) -> Void)? = nil) async throws -> Data {
         
+        if isloaderHide ?? false{
+            loaderManager.showLoadingWithDelay()
+        }
         // If offline and cached data exists, return cached response
         if !isConnected, let cachedData = getCachedData(for: request) {
             return cachedData
@@ -144,8 +152,8 @@ public actor APIManager {
             switch request {
             case .getRequest(let url, let headers):
                 responseData = try await fetchData(from: url, headers: headers)
-            case .postRequest(let url, let body, let headers):
-                responseData = try await sendData(to: url, method: .post, body: body, headers: headers)
+            case .postRequest(let url, let body,let method ,let headers):
+                responseData = try await sendData(to: url, method: method, body: body, headers: headers)
             case .uploadMultipart(let url, let parameters, let files, let headers):
                 responseData = try await uploadMultipart(to: url, parameters: parameters, files: files, headers: headers)
             case .restRequest(let url, let method, let body, let headers):
@@ -154,6 +162,7 @@ public actor APIManager {
             
             // Cache successful response
             cacheData(responseData, for: request)
+            await loaderManager.hideLoading()
             return responseData
             
         } catch {
@@ -163,6 +172,7 @@ public actor APIManager {
             if !isConnected {
                 addPendingRequest(request)
             }
+            await loaderManager.hideLoading()
             throw error
         }
     }
@@ -183,7 +193,7 @@ public actor APIManager {
     private func cacheKey(for request: APIRequest) -> String {
         switch request {
         case .getRequest(let url, _): return url.absoluteString
-        case .postRequest(let url, _, _): return url.absoluteString
+        case .postRequest(let url, _, _, _): return url.absoluteString
         case .uploadMultipart(let url, _, _, _): return url.absoluteString
         case .restRequest(let url, _, _, _): return url.absoluteString
         }
@@ -201,9 +211,9 @@ public actor APIManager {
         for request in pendingRequests {
             do {
                 let _ = try await handleRequest(request)
-                print("✅ Retried API: \(request)")
+                debugPrint("✅ Retried API: \(request)")
             } catch {
-                print("❌ Retry Failed:", error.localizedDescription)
+                debugPrint("❌ Retry Failed:", error.localizedDescription)
             }
         }
         pendingRequests.removeAll()
@@ -222,6 +232,8 @@ public actor APIManager {
             throw APIError.networkUnavailable
         }
         
+        debugPrint("Bearer \(await UserDefaultsManager.shared.get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?.accessToken ?? "")")
+        
         var request = URLRequest(url: url)
         request.cachePolicy = .reloadIgnoringLocalCacheData
         request.setValue("Bearer \(await UserDefaultsManager.shared.get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?.accessToken ?? "")", forHTTPHeaderField: "Authorization")
@@ -229,11 +241,11 @@ public actor APIManager {
         setHeaders(request: &request, headers: headers)
         
         let (data, response) = try await session.data(for: request)
-        debugPrint("Response : \(try data.toDictionary())")
+        debugPrint("Response : \(try data.dataToDictionary())")
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             throw APIError.invalidResponse
         }
-        debugPrint("Response : \(try data.toDictionary())")
+        debugPrint("Response : \(try data.dataToDictionary())")
         return autoreleasepool { data }
     }
     
@@ -250,7 +262,6 @@ public actor APIManager {
             
             setHeaders(request: &request, headers: headers)
             
-            debugPrint("Api Header : \(request)")
             let (data, response) = try await session.data(for: request)
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw APIError.invalidResponse
@@ -259,9 +270,11 @@ public actor APIManager {
         }
         
         let (data, response) = try await makeRequest()
-        debugPrint("Response : \(try data.toDictionary())")
+        debugPrint("Response : \(try data.dataToDictionary())")
         if response.statusCode == 200 {
             return data
+        } else if response.statusCode == 500 {
+            throw APIError.defaultMessage(try data.dataToDictionary()["message"] as? String ?? "")
         } else if response.statusCode == 401 || response.statusCode == 400{
             try await refreshTokenIfNeeded()
             let (retryData, retryResponse) = try await makeRequest()
