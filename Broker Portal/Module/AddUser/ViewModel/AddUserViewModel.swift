@@ -56,7 +56,7 @@ class AddUserViewModel {
         if isEdit{
             params[ConstantParam.PasswordUser.rawValue] = "pwd@1234"
         }
-        debugPrint(params)
+        Log.debug(params)
         
         Task {
             do {
@@ -69,12 +69,12 @@ class AddUserViewModel {
                 
                 if response.status != 0 {
                     // ✅ Handle success scenario
-                    await ToastManager.shared.showToast(message: response.message ?? "User added successfully.")
+                    await ToastManager.shared.showToast(message: response.message)
                     // Optionally: notify delegate / close screen / reset form
                     await view.popView()
                 } else {
                     // ❌ API reported failure
-                    await ToastManager.shared.showToast(message: response.message ?? ErrorMessages.somethingWentWrong.rawValue)
+                    await ToastManager.shared.showToast(message: response.message)
                 }
                 
             } catch {

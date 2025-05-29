@@ -53,7 +53,7 @@ class LoginViewModel {
                         }
                     }
                 } else {
-                    await ToastManager.shared.showToast(message: response.message ?? "")
+                    await ToastManager.shared.showToast(message: response.message)
                 }
             } catch {
                 await ToastManager.shared.showToast(message: error.localizedDescription)

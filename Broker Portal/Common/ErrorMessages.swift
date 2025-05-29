@@ -23,6 +23,14 @@ enum Log {
         output += "\n🛑 🛑 🛑 🛑"
         debugPrint(output)
     }
+    
+    static func error(_ message: String) {
+        debugPrint(message)
+    }
+    
+    static func debug(_ message: Any) {
+        debugPrint(message)
+    }
 }
 
 enum ErrorMessages: String {

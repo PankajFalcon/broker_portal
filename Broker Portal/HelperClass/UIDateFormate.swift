@@ -52,7 +52,7 @@ struct DateUtils {
         formatter.dateFormat = (inputFormat == .custom) ? (customInputFormat ?? "") : inputFormat.rawValue
         
         guard let date = formatter.date(from: dateString) else {
-            print("❌ Failed to convert to Date: \(dateString)")
+            Log.error("❌ Failed to convert to Date: \(dateString)")
             return nil
         }
         

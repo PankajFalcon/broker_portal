@@ -167,8 +167,8 @@ public actor APIManager {
             
         } catch {
             // If offline, store failed request for retry
-            debugPrint("Is Connected with internet \(self.isConnected)")
-            debugPrint("Error \(error.localizedDescription)")
+            Log.debug("Is Connected with internet \(self.isConnected)")
+            Log.debug("Error \(error.localizedDescription)")
             if !isConnected {
                 addPendingRequest(request)
             }
@@ -211,9 +211,9 @@ public actor APIManager {
         for request in pendingRequests {
             do {
                 let _ = try await handleRequest(request)
-                debugPrint("✅ Retried API: \(request)")
+                Log.debug("✅ Retried API: \(request)")
             } catch {
-                debugPrint("❌ Retry Failed:", error.localizedDescription)
+                Log.debug("❌ Retry Failed:", error.localizedDescription)
             }
         }
         pendingRequests.removeAll()
@@ -228,11 +228,11 @@ public actor APIManager {
     // MARK: - GET Request (Efficient Memory Usage)
     private func fetchData(from url: URL, headers: [String: Any]?) async throws -> Data {
         guard isConnected else {
-            debugPrint("Error is \(APIError.networkUnavailable.localizedDescription)")
+            Log.debug("Error is \(APIError.networkUnavailable.localizedDescription)")
             throw APIError.networkUnavailable
         }
         
-        debugPrint("Bearer \(await UserDefaultsManager.shared.get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?.accessToken ?? "")")
+        Log.debug("Bearer \(await UserDefaultsManager.shared.get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?.accessToken ?? "")")
         
         var request = URLRequest(url: url)
         request.cachePolicy = .reloadIgnoringLocalCacheData
@@ -241,11 +241,10 @@ public actor APIManager {
         setHeaders(request: &request, headers: headers)
         
         let (data, response) = try await session.data(for: request)
-        debugPrint("Response : \(try data.dataToDictionary())")
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             throw APIError.invalidResponse
         }
-        debugPrint("Response : \(try data.dataToDictionary())")
+        Log.debug("Response : \(try data.dataToDictionary())")
         return autoreleasepool { data }
     }
     
@@ -270,7 +269,7 @@ public actor APIManager {
         }
         
         let (data, response) = try await makeRequest()
-        debugPrint("Response : \(try data.dataToDictionary())")
+        Log.debug("Response : \(try data.dataToDictionary())")
         if response.statusCode == 200 {
             return data
         } else if response.statusCode == 500 {
@@ -306,7 +305,7 @@ public actor APIManager {
             let task = session.uploadTask(with: request, from: body)
             uploadTask.task = task
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                debugPrint("Safe to log request now: \(String(describing: task.originalRequest?.url))")
+                Log.debug("Safe to log request now: \(String(describing: task.originalRequest?.url))")
             }
             task.resume()
         }

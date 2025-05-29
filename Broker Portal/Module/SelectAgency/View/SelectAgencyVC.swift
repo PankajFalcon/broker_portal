@@ -47,7 +47,7 @@ class SelectAgencyVC: UIViewController {
         let searchText = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() ?? ""
         let agencyNames = agencies.map { $0.name ?? "" }
         filterName = agencyNames.filter { $0.lowercased().contains(searchText) }
-        debugPrint(filterName)
+        Log.debug(filterName)
         showDropdown(agencyNames: filterName)
     }
     

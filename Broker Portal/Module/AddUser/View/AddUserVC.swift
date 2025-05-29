@@ -42,7 +42,7 @@ class AddUserVC: UIViewController {
             uniqueKeysWithValues: mirror.children.compactMap {
                 guard let key = $0.label else { return nil }
                 let value = unwrap($0.value)
-                print("🔑 Key: \(key), 🧾 Value: \(value)") // 👈 Debug Print
+                Log.error("🔑 Key: \(key), 🧾 Value: \(value)") // 👈 Debug Print
                 return (key, value)
             }
         )
@@ -112,7 +112,7 @@ extension AddUserVC: UITableViewDelegate, UITableViewDataSource {
         cell.txtField.tag = indexPath.row
         cell.txtField.delegate = self
         
-        // Set value based on textFieldType
+        //MARK: Set value based on textFieldType
         switch indexData.textFieldType {
         case .dropdown:
             cell.txtField.rightImage = Icon.dropDown.image ??  UIImage()

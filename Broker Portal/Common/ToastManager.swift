@@ -14,7 +14,7 @@ actor ToastManager {
     private var isShowing = false
     
     func showToast(
-        message: String,
+        message: String?,
         duration: TimeInterval = 2.0,
         font: UIFont = InterFontStyle.bold.with(size: 14),
         backgroundColor: UIColor = UIColor.LableTittleColor,
@@ -34,7 +34,7 @@ actor ToastManager {
             }
             
             let toastLabel = PaddingLabel()
-            toastLabel.text = message
+            toastLabel.text = message ?? ErrorMessages.somethingWentWrong.rawValue
             toastLabel.font = font
             toastLabel.textColor = textColor
             toastLabel.backgroundColor = backgroundColor

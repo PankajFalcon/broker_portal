@@ -28,13 +28,13 @@ struct UserImageGenerator {
                 if let downloadedImage = UIImage(data: data) {
                     return downloadedImage.circularImage(size: size)
                 } else {
-                    debugPrint("Failed to convert downloaded data to UIImage")
+                    Log.error("Failed to convert downloaded data to UIImage")
                 }
             } catch {
-                debugPrint("Error downloading image: \(error)")
+                Log.error("Error downloading image: \(error)")
             }
         } else {
-            debugPrint("Invalid URL: \(String(describing: imageURLString ?? ""))")
+            Log.error("Invalid URL: \(String(describing: imageURLString ?? ""))")
         }
         
         // If image not available, generate initials image

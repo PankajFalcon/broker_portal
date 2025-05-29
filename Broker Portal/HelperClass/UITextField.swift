@@ -96,7 +96,6 @@ final class PhoneTextFieldDelegate: NSObject, UITextFieldDelegate {
     }
 }
 
-
 //MARK: This Code use for disable Past Functionality
 
 final class PasteBlocker {
@@ -105,7 +104,6 @@ final class PasteBlocker {
         UITextView.swizzleCanPerformAction()
     }
 }
-
 
 extension UITextField {
     static func swizzleCanPerformAction() {

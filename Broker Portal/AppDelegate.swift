@@ -13,12 +13,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        //        KeyboardManager.shared.enable()
+        // KeyboardManager.shared.enable()
         
         // Set custom appearance for UITextField and UITextView
         UITextField.appearance().tintColor = .LableTittleColor
         UITextView.appearance().tintColor = .LableTittleColor
-        //        PasteBlocker.disablePasteGlobally()
+        // PasteBlocker.disablePasteGlobally()
         
         // Perform async initialization of APIManager and ensure no retain cycles
         Task { [weak self] in
@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             // Initialize APIManager
             await APIManager.initializeShared()
-            debugPrint("✅ APIManager is ready")
+            Log.error("✅ APIManager is ready")
             
             // Now it's safe to use APIManager.shared.handleRequest()
             // You can make your first API call here if needed, for example:
@@ -50,6 +50,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-    
     
 }

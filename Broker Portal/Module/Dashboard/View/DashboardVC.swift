@@ -20,7 +20,7 @@ class DashboardVC: UIViewController {
     private let debouncer = Debouncer(delay: 0.5) // 0.5 seconds delay
     private var isActivity : Bool?
     
-    var responseModel : [RecentActivityRecord]?
+    private var responseModel : [RecentActivityRecord]?
     
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
@@ -69,7 +69,6 @@ class DashboardVC: UIViewController {
         }else{
             await fetchPolicy()
         }
-        
     }
     
     private func setupSearchTextField() {
@@ -156,14 +155,14 @@ class DashboardVC: UIViewController {
                 }else{
                     viewModel.isLoading = true
                 }
-                tableView.setEmptyMessage("No recent activity found.", self.responseModel?.count ?? 0)
                 
-                self.tableView.refresh()
+                tableView.setEmptyMessage("No recent activity found.", self.responseModel?.count ?? 0)
+                tableView.refresh()
             } catch {
                 // Handle error (e.g., show an alert)
                 Log.error("Failed to fetch activities: \(error.localizedDescription)")
-                self.responseModel?.removeAll()
-                self.tableView.refresh()
+                responseModel?.removeAll()
+                tableView.refresh()
                 await ToastManager.shared.showToast(message: error.localizedDescription)
             }
         }
@@ -190,7 +189,7 @@ class DashboardVC: UIViewController {
                     viewModel.isLoading = true
                 }
                 tableView.setEmptyMessage("No policy found.", self.responseModel?.count ?? 0)
-                self.tableView.refresh()
+                tableView.refresh()
             } catch {
                 // Handle error (e.g., show an alert)
                 Log.error("Failed to fetch policy: \(error.localizedDescription)")

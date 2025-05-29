@@ -79,7 +79,7 @@ extension UIViewController {
         }
         return true
     }
-
+    
     
     func presentPopup(
         from parentVC: UIViewController,
@@ -93,19 +93,19 @@ extension UIViewController {
         let popup = PopupView(nibName: "PopupView", bundle: nil)
         popup.modalPresentationStyle = .overCurrentContext
         popup.modalTransitionStyle = .crossDissolve
-
+        
         popup.mainTitle = mainTitle.rawValue
         popup.subTitle = subTitle.rawValue
         popup.btnOkTitle = btnOkTitle.rawValue
         popup.btnCancelTitle = btnCancelTitle.rawValue
-
+        
         popup.onOkPressed = onOkPressed
         popup.onCancelPressed = onCancelPressed
-
+        
         parentVC.present(popup, animated: true)
     }
-
-
+    
+    
     
     /// Instantiate a view controller from a storyboard.
     /// - Parameters:
@@ -117,6 +117,7 @@ extension UIViewController {
         let id = identifier?.rawValue ?? String(describing: T.self)
         
         guard let viewController = storyboard.instantiateViewController(withIdentifier: id) as? T else {
+            Log.error("❌ ViewController with identifier \(id) not found in \(storyboardName) storyboard.")
             fatalError("❌ ViewController with identifier \(id) not found in \(storyboardName) storyboard.")
         }
         return viewController
@@ -131,7 +132,7 @@ extension UIViewController {
             nav.pushViewController(vc, animated: true)
         } else {
             guard let navigationController = self.navigationController else {
-                debugPrint("NavigationController not found. Make sure this view controller is embedded in a UINavigationController.")
+                Log.error("NavigationController not found. Make sure this view controller is embedded in a UINavigationController.")
                 return
             }
             navigationController.pushViewController(vc, animated: true)
@@ -173,7 +174,7 @@ extension UIViewController {
     func actionSheet(agencyID: Int) {
         var actions: [ActionSheetAction] = [
             .init(title: "User Profile", type: .default, handler: {
-                debugPrint("User Profile tapped")
+                Log.error("User Profile tapped")
             })
         ]
         
@@ -230,8 +231,6 @@ extension UIViewController {
         }
     }
     
-    
-    
     func configureNavigationBar(
         title: String? = nil,
         leftTitle: String? = nil,
@@ -245,7 +244,7 @@ extension UIViewController {
         rightAction: (() -> Void)? = nil
     ) {
         self.title = title
-
+        
         // MARK: - Configure Modern Navigation Bar Appearance (Swift 6)
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -258,13 +257,13 @@ extension UIViewController {
             .foregroundColor: UIColor.white,
             .font: UIFont.systemFont(ofSize: 34, weight: .bold)
         ]
-
+        
         guard let navigationBar = navigationController?.navigationBar else { return }
         navigationBar.standardAppearance = appearance
         navigationBar.scrollEdgeAppearance = appearance
         navigationBar.compactAppearance = appearance
         navigationBar.tintColor = .white // Optional: sets bar button item color
-
+        
         // MARK: - Left Bar Button Item
         navigationItem.leftBarButtonItem = createBarButtonItem(
             title: leftTitle,
@@ -272,7 +271,7 @@ extension UIViewController {
             customImage: leftCustomImage,
             action: leftAction
         )
-
+        
         // MARK: - Right Bar Button Item
         Task {
             let customImage: UIImage? = await {
@@ -290,7 +289,7 @@ extension UIViewController {
                 }
                 return nil
             }()
-
+            
             navigationItem.rightBarButtonItem = createBarButtonItem(
                 title: rightTitle,
                 image: rightImage?.image,
@@ -300,7 +299,6 @@ extension UIViewController {
             )
         }
     }
-
     
     private func createBarButtonItem(
         title: String?,

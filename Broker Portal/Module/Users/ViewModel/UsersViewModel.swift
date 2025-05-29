@@ -35,7 +35,7 @@ class UsersViewModel{
                     await self.view?.tableView.setEmptyMessage(ErrorMessages.nouserfound.rawValue, self.model?.data?.count ?? 0)
                 } else {
                     await self.view?.tableView.setEmptyMessage(response.message ?? "", self.model?.data?.count ?? 0)
-                    await ToastManager.shared.showToast(message: response.message ?? "")
+                    await ToastManager.shared.showToast(message: response.message)
                 }
             } catch {
                 await self.view?.tableView.setEmptyMessage(error.localizedDescription, self.model?.data?.count ?? 0)
@@ -65,7 +65,7 @@ class UsersViewModel{
         params[ConstantParam.PasswordUser.rawValue] = "pwd@1234"
         params.removeValue(forKey: "id")
         params.removeValue(forKey:"user_type")
-        debugPrint(params)
+        Log.debug(params)
         
         Task {
             do {
@@ -78,12 +78,12 @@ class UsersViewModel{
                 
                 if response.status != 0 {
                     // ✅ Handle success scenario
-                    await ToastManager.shared.showToast(message: response.message ?? "User added successfully.")
+                    await ToastManager.shared.showToast(message: response.message)
                     //self.filterModel?[index].user_status = self.filterModel?[index].user_status == .active ? .inactive : .active
                     await view.tableView.refresh()
                 } else {
                     // ❌ API reported failure
-                    await ToastManager.shared.showToast(message: response.message ?? ErrorMessages.somethingWentWrong.rawValue)
+                    await ToastManager.shared.showToast(message: response.message)
                 }
                 
             } catch {

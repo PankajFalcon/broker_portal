@@ -150,7 +150,7 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        debugPrint("section : \(indexPath.section) , indexPath : \(indexPath.row)")
+        Log.error("section : \(indexPath.section) , indexPath : \(indexPath.row)")
         let subtitle = sideMenuItems[indexPath.section].subtitle[indexPath.row]
         SideMenuManager.shared.sideMenuController?.toggleMenu(forceOpen: false)
         switch subtitle{

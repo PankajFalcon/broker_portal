@@ -59,7 +59,7 @@ actor InsuranceAgencyManager {
             if response.status != 0 {
                 return response.data ?? []
             } else {
-                await ToastManager.shared.showToast(message: response.message ?? "Unknown error")
+                await ToastManager.shared.showToast(message: response.message)
                 return []
             }
         } catch {

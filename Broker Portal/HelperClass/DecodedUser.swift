@@ -16,7 +16,7 @@ actor AESDecryptor {
         guard let encryptedData = Data(base64Encoded: base64EncodedString),
               let keyData = key.data(using: .utf8),
               let ivData = iv.data(using: .utf8) else {
-            print("Invalid base64 input or key/IV conversion failed.")
+            Log.error("Invalid base64 input or key/IV conversion failed.")
             return nil
         }
 
@@ -41,7 +41,7 @@ actor AESDecryptor {
                     }
 
                     guard status == kCCSuccess else {
-                        print("Decryption failed with status: \(status)")
+                        Log.error("Decryption failed with status: \(status)")
                         return nil
                     }
 
