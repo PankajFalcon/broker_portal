@@ -4,5 +4,5 @@
 target 'Broker Portal' do
   use_frameworks!
 
-  
+#  pod 'IQKeyboardManagerSwift'
 end

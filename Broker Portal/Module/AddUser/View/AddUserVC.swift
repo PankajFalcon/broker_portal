@@ -38,15 +38,27 @@ class AddUserVC: UIViewController {
         with model: T
     ) -> [AddUserUIModel] {
         let mirror = Mirror(reflecting: model)
-        let modelDict: [String: String] = Dictionary(
-            uniqueKeysWithValues: mirror.children.compactMap {
-                guard let key = $0.label else { return nil }
-                let value = unwrap($0.value)
-                Log.error("🔑 Key: \(key), 🧾 Value: \(value)") // 👈 Debug Print
-                return (key, value)
-            }
-        )
         
+        // Create a dictionary of model properties
+        var modelDict: [String: String] = [:]
+        
+        for child in mirror.children {
+            guard let key = child.label else { continue }
+            var value = unwrap(child.value)
+            
+            if key == ConstantApiParam.State,
+               let dropdownItem = viewModel?.userFields
+                .first(where: { $0.param.rawValue == key })?
+                .dropdownValue?
+                .first(where: { $0.value == value || $0.label == value }) {
+                value = dropdownItem.value
+            }
+            
+            Log.error("🔑 Key: \(key), 🧾 Value: \(value)") // Optional debug log
+            modelDict[key] = value
+        }
+        
+        // Update UI models using the dictionary
         return uiModels.map { uiModel in
             var updated = uiModel
             updated.value = modelDict[uiModel.param.rawValue] ?? ""
@@ -54,7 +66,7 @@ class AddUserVC: UIViewController {
         }
     }
     
-    func unwrap(_ any: Any) -> String {
+    private func unwrap(_ any: Any) -> String {
         let mirror = Mirror(reflecting: any)
         if mirror.displayStyle == .optional {
             if let child = mirror.children.first {
@@ -76,22 +88,31 @@ class AddUserVC: UIViewController {
     
     @IBAction func submitOnPress(_ sender: UIButton) {
         view.endEditing(true)
-        let result = areAllRequiredValuesPresent(
-            in: viewModel?.userFields ?? [],
+        
+        guard let userFields = viewModel?.userFields else { return }
+        
+        if let missingIndex = areAllRequiredValuesPresent(
+            in: userFields,
             valuePath: \.value,
             isRequiredPath: \.isRequired
-        )
-        
-        if result {
-            // Use async if viewModel's addUser() is an async operation
-            Task {
-                await viewModel?.addAndUpdateUser(isEdit: self.userDetails != nil)
-            }
-        } else {
+        ) {
             checkValidation = true
-            tableView.reloadData() // Prefer reloadData for full refresh
+            tableView.reloadData()
+            
+            Task {
+                await MainActor.run {
+                    let indexPath = IndexPath(row: missingIndex, section: 0)
+                    tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+                }
+            }
+            
+        } else {
+            Task {
+                await viewModel?.addAndUpdateUser(isEdit: userDetails != nil)
+            }
         }
     }
+    
 }
 
 extension AddUserVC: UITableViewDelegate, UITableViewDataSource {
@@ -116,7 +137,7 @@ extension AddUserVC: UITableViewDelegate, UITableViewDataSource {
         switch indexData.textFieldType {
         case .dropdown:
             cell.txtField.rightImage = Icon.dropDown.image ??  UIImage()
-            cell.txtField.text = indexData.dropdownValue?.first(where: { $0.value == indexData.value })?.label
+            cell.txtField.text = indexData.dropdownValue?.first(where: { $0.value == indexData.value || $0.label == indexData.value})?.label
         default:
             cell.txtField.rightImage = nil
             cell.txtField.text = indexData.value ?? ""

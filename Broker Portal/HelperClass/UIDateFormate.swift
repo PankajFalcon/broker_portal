@@ -35,7 +35,7 @@ struct DateUtils {
         outputFormatter.dateFormat = (outputFormat == .custom) ? (customOutputFormat ?? "") : outputFormat.rawValue
         
         guard let date = inputFormatter.date(from: dateString) else {
-            print("❌ Failed to parse date: \(dateString)")
+            Log.debug("❌ Failed to parse date: \(dateString)")
             return nil
         }
         return outputFormatter.string(from: date)

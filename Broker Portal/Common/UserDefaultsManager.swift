@@ -13,6 +13,11 @@ struct UserDefaultsKey{
     static let SelectedAgencies = "SelectedAgencies"
 }
 
+enum UserType {
+    case admin
+    case normal
+}
+
 actor UserDefaultsManager {
     
     static let shared = UserDefaultsManager()
@@ -48,11 +53,23 @@ actor UserDefaultsManager {
     
     // MARK: - Clear All
     func clearAll() async {
+        // Clear any in-app cache first (if exists)
         await LoginModel.userCache.clear()
-        for key in defaults.dictionaryRepresentation().keys {
+        
+        // Remove all keys one by one
+        let keys = defaults.dictionaryRepresentation().keys
+        for key in keys {
             defaults.removeObject(forKey: key)
         }
+        
         defaults.synchronize()
+        
+        // Just to be extra safe: remove persistent domain
+        if let appDomain = Bundle.main.bundleIdentifier {
+            UserDefaults.standard.removePersistentDomain(forName: appDomain)
+            UserDefaults.standard.synchronize()
+        }
+        Log.debug("✅ UserDefaults cleared. Remaining keys:  \(defaults.dictionaryRepresentation().keys)")
     }
     
     func getSelectedAgency() async -> AgencyModelResponseData?{
@@ -71,4 +88,12 @@ actor UserDefaultsManager {
         return agencyID
     }
     
+    func getCurrentUserType() async -> UserType {
+        let userTypeId = await UserDefaultsManager.shared.fatchCurentUser()?.userTypeId ?? 0
+        return userTypeId == 41 ? .admin : .normal
+    }
+    
+    func isAdmin() async -> Bool {
+        return await getCurrentUserType() == .admin
+    }
 }

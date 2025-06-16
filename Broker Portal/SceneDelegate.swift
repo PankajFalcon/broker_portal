@@ -41,10 +41,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
         
-        let userTypeId = await UserDefaultsManager.shared.fatchCurentUser()?.userTypeId ?? 0
+        let isAdmin = await UserDefaultsManager.shared.isAdmin()
         let agencyID = await UserDefaultsManager.shared.getAgencyID()
         
-        if userTypeId == 41 && agencyID == 0 {
+        if isAdmin && agencyID == 0 {
             await UserDefaultsManager.shared.clearAll()
             createSideMenu(rootVC: LoginVC.instantiate(fromStoryboard: .main,identifier: .LoginVC))
             return
@@ -80,7 +80,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-    
     
 }
 

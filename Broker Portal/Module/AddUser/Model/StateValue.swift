@@ -17,7 +17,6 @@ struct DropDownModel :Codable{
     }
 }
 
-
 let userType: [DropDownModel] = [
     DropDownModel(label: "BROKER ADMIN", value: "51"),
     DropDownModel(label: "BROKER USER", value: "52")

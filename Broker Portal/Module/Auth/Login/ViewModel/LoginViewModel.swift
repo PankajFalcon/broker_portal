@@ -18,7 +18,7 @@ class LoginViewModel {
     func loginApiCall() {
         guard let view = self.view else { return }
         guard let url = APIConstants.userlogin else { return }
-
+        
         let param = [
             ConstantApiParam.UserID: view.txtEmail.text ?? "",
             ConstantApiParam.Password: view.txtPassword.text ?? ""
@@ -35,7 +35,7 @@ class LoginViewModel {
                 if response.status != 0 {
                     await UserDefaultsManager.shared.set(response, forKey: UserDefaultsKey.LoginResponse)
                     
-                    if await response.decodedUser?.userTypeId ?? 0 == 41 {
+                    if await UserDefaultsManager.shared.isAdmin() {
                         await self.view?.present(SelectAgencyVC.self, from: .main) { vc in
                             vc.saveAgency = {
                                 Task {
@@ -60,5 +60,5 @@ class LoginViewModel {
             }
         }
     }
-
+    
 }

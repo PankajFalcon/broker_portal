@@ -213,7 +213,7 @@ public actor APIManager {
                 let _ = try await handleRequest(request)
                 Log.debug("✅ Retried API: \(request)")
             } catch {
-                Log.debug("❌ Retry Failed:", error.localizedDescription)
+                Log.debug("\("❌ Retry Failed: \(error.localizedDescription)")")
             }
         }
         pendingRequests.removeAll()
@@ -232,6 +232,7 @@ public actor APIManager {
             throw APIError.networkUnavailable
         }
         
+        Log.debug("**** Api: \(url.absoluteString)")
         Log.debug("Bearer \(await UserDefaultsManager.shared.get(LoginModel.self, forKey: UserDefaultsKey.LoginResponse)?.accessToken ?? "")")
         
         var request = URLRequest(url: url)

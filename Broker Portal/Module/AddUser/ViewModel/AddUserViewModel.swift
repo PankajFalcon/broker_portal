@@ -16,18 +16,18 @@ class AddUserViewModel {
     }
     
     var userFields: [AddUserUIModel] = [
-        .init(title: "First Name",param: .FirstName, isRequired: true, placeholder: "Eg: Johne"),
-        .init(title: "Middle Name",param: .MiddleName ,isRequired: false, placeholder: "Eg: David"),
-        .init(title: "Last Name",param: .LastName ,isRequired: true, placeholder: "Eg: Smith"),
-        .init(title: "Address",param: .Address ,isRequired: false, placeholder: "Eg: 3555 Pennsylvania Avenue"),
-        .init(title: "City",param: .City ,isRequired: false, placeholder: "Eg: Bluefield"),
-        .init(title: "State",param: .State, isRequired: false, textFieldType: .dropdown, dropdownValue: states, placeholder: "Select..."),
-        .init(title: "Zip Code",param: .Zipcode ,isRequired: true, placeholder: "Enter..."),
-        .init(title: "Contact Number Office",param: .ContactOffice ,isRequired: false,keyboardType:.phone, placeholder: "Eg: (212) 555 4567"),
-        .init(title: "Contact Number Mobile",param: .ContactMobile ,isRequired: false,keyboardType:.phone, placeholder: "Eg: (212) 555 4567"),
-        .init(title: "User Type",param: .UserType ,isRequired: true, textFieldType: .dropdown, dropdownValue: userType, placeholder: "Select..."),
-        .init(title: "Business Email",param: .Email ,isRequired: true, placeholder: "abc@example.com"),
-        .init(title: "Password",param: .PasswordUser,errorMessage:ErrorMessages.invalidPassword.rawValue ,isRequired: true, placeholder: "********")
+        .init(title: ConstantTitle.FirstName,param: .FirstName, isRequired: true, placeholder: ConstantPlaceholderValue.Eg_Johne),
+        .init(title: ConstantTitle.MiddleName,param: .MiddleName ,isRequired: false, placeholder: ConstantPlaceholderValue.Eg_David),
+        .init(title: ConstantTitle.LastName,param: .LastName ,isRequired: true, placeholder: ConstantPlaceholderValue.Eg_David),
+        .init(title: ConstantTitle.Address,param: .Address ,isRequired: false, placeholder: ConstantPlaceholderValue.Eg_Address),
+        .init(title: ConstantTitle.City,param: .City ,isRequired: false, placeholder: ConstantPlaceholderValue.Eg_City),
+        .init(title: ConstantTitle.State,param: .State, isRequired: false, textFieldType: .dropdown, dropdownValue: states, placeholder: ConstantPlaceholderValue.Select),
+        .init(title: ConstantTitle.Zipcode,param: .Zipcode ,isRequired: true, placeholder: ConstantPlaceholderValue.Enter),
+        .init(title: ConstantTitle.ContactNumberOffice,param: .ContactOffice ,isRequired: false,keyboardType:.phone, placeholder: ConstantPlaceholderValue.Phone),
+        .init(title: ConstantTitle.ContactNumberMobile,param: .ContactMobile ,isRequired: false,keyboardType:.phone, placeholder: ConstantPlaceholderValue.Phone),
+        .init(title: ConstantTitle.UserType,param: .UserType ,isRequired: true, textFieldType: .dropdown, dropdownValue: userType, placeholder: ConstantPlaceholderValue.Select),
+        .init(title: ConstantTitle.BusinessEmail,param: .Email ,isRequired: true, placeholder: ConstantPlaceholderValue.Eg_Email),
+        .init(title: ConstantTitle.Password,param: .PasswordUser,errorMessage:ErrorMessages.invalidPassword.rawValue ,isRequired: true, placeholder: ConstantPlaceholderValue.Eg_Passowrd)
     ]
     
     func addAndUpdateUser(isEdit:Bool) async {
@@ -35,10 +35,10 @@ class AddUserViewModel {
             let view = self.view,
             let url = await isEdit ? APIConstants.updateUser(self.view?.userDetails?.id ?? 0) : APIConstants.addUser
         else {
-            Log.error("Invalid view or URL.")
+            Log.error(ErrorMessages.invalidURL.rawValue)
             return
         }
-               
+        
         var params = await view.dictionaryFrom(
             array: userFields,
             keyPath: \AddUserUIModel.param,
@@ -46,7 +46,7 @@ class AddUserViewModel {
         )
         
         params[ConstantApiParam.AgencyID] = await UserDefaultsManager.shared.getAgencyID()
-        params["user_status"] = ""
+        params["user_status"] = await view.userDetails?.user_status == .active ? UserStatus.active.rawValue : UserStatus.inactive.rawValue
         params["gender"] = "Male"
         params["default_user"] = "N"
         params["supervisor"] = NSNull()
@@ -86,4 +86,3 @@ class AddUserViewModel {
     }
     
 }
-

@@ -12,7 +12,7 @@ class UsersVC: UIViewController {
     @IBOutlet weak var txtSearch: UITextField!
     @IBOutlet weak var tableView: UITableView!
     
-    var viewModel : UsersViewModel?
+    private var viewModel : UsersViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,8 +22,8 @@ class UsersVC: UIViewController {
         
         // Configure navigation bar
         configureNavigationBar(
-            title: AppTitle.Users.rawValue,leftImage: .back,rightImage: .add) {
-                self.push(AddUserVC.self, from: .admin)
+            title: AppTitle.Users.rawValue,leftImage: .back,rightImage: .add) { [weak self] in
+                self?.push(AddUserVC.self, from: .admin)
             }
         
         setupSearchTextField()
@@ -37,10 +37,10 @@ class UsersVC: UIViewController {
     }
     
     private func setupTableView(){
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.tableFooterView = UIView()
-        self.tableView.register(cellType: BrokerUserXIB.self)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.tableFooterView = UIView()
+        tableView.register(cellType: BrokerUserXIB.self)
         tableView.addRefreshControl {
             Task{
                 await self.refreshData()
@@ -65,7 +65,7 @@ class UsersVC: UIViewController {
     @objc private func textFieldDidChange(_ textField: UITextField) {
         let query = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() ?? ""
         
-        guard let viewModel = self.viewModel,
+        guard let viewModel = viewModel,
               let data = viewModel.model?.data else {
             return
         }
@@ -84,12 +84,12 @@ class UsersVC: UIViewController {
             }
         }
         
-        self.tableView.refresh()
+        tableView.refresh()
     }
     
     @objc func activeOnPress(sender:UIButton) {
         Task{
-            await self.viewModel?.activeOrInactive(index: sender.tag)
+            await viewModel?.activeOrInactive(index: sender.tag)
         }
     }
     
@@ -98,7 +98,7 @@ class UsersVC: UIViewController {
     }
     
     @objc func editOnPress(sender:UIButton){
-        if let indexData = self.viewModel?.filterModel?[sender.tag]{
+        if let indexData = viewModel?.filterModel?[sender.tag]{
             push(AddUserVC.self, from: .admin) { [weak self] vc in
                 guard self != nil else { return }
                 vc.userDetails = indexData
@@ -110,7 +110,7 @@ class UsersVC: UIViewController {
 
 extension UsersVC:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel?.filterModel?.count ?? 0
+        return viewModel?.filterModel?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -120,23 +120,19 @@ extension UsersVC:UITableViewDelegate,UITableViewDataSource{
         cell.btnChangePassword.tag = indexPath.row
         cell.btnActive.tag = indexPath.row
         
-        cell.btnEdit.addTarget(self, action: #selector(self.editOnPress(sender:)), for: .touchUpInside)
-        cell.btnActive.addTarget(self, action: #selector(self.activeOnPress(sender:)), for: .touchUpInside)
-        cell.btnChangePassword.addTarget(self, action: #selector(self.changePasswordOnPress(sender:)), for: .touchUpInside)
+        Task{
+            cell.btnEdit.isHidden = await UserDefaultsManager.shared.isAdmin()
+            cell.btnActive.isHidden = await UserDefaultsManager.shared.isAdmin()
+            cell.btnChangePassword.isHidden = await UserDefaultsManager.shared.isAdmin()
+        }
         
-        cell.setupData(model: self.viewModel?.filterModel?[indexPath.row])
+        cell.btnEdit.addTarget(self, action: #selector(editOnPress(sender:)), for: .touchUpInside)
+        cell.btnActive.addTarget(self, action: #selector(activeOnPress(sender:)), for: .touchUpInside)
+        cell.btnChangePassword.addTarget(self, action: #selector(changePasswordOnPress(sender:)), for: .touchUpInside)
+        
+        cell.setupData(model: viewModel?.filterModel?[indexPath.row])
         
         return cell
     }
-    
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        
-//        if let indexData = self.viewModel?.filterModel?[indexPath.row]{
-//            push(AddUserVC.self, from: .admin) { [weak self] vc in
-//                guard self != nil else { return }
-//                vc.userDetails = indexData
-//            }
-//        }
-//    }
     
 }

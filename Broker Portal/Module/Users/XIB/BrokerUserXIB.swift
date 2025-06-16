@@ -31,7 +31,7 @@ class BrokerUserXIB: UITableViewCell {
         lblAgency.text = "\(model?.agency_id ?? 0)"
         lblUserType.text = model?.user_type ?? ""
         
-        if model?.user_status == .active{
+        if model?.user_status == .inactive{
             containerView.backgroundColor = .AppLightGrey.withAlphaComponent(0.08)
         }else{
             containerView.backgroundColor = .AppWhiteColor

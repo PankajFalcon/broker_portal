@@ -6,14 +6,12 @@
 //
 
 import UIKit
-
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        // KeyboardManager.shared.enable()
+        KeyboardManager.shared.enable()
         
         // Set custom appearance for UITextField and UITextView
         UITextField.appearance().tintColor = .LableTittleColor

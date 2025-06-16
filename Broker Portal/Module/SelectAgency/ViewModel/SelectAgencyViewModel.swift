@@ -36,7 +36,7 @@ actor InsuranceAgencyManager {
                 await UserDefaultsManager.shared.set(newAgencies, forKey: UserDefaultsKey.Agencies)
                 return newAgencies
             } catch {
-                print("❌ API fetch failed: \(error.localizedDescription)")
+                Log.debug("❌ API fetch failed: \(error.localizedDescription)")
                 return agencies // return current (even if nil)
             }
         }else{

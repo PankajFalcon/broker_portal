@@ -1,128 +1,145 @@
-//
-//  KeyboardManager.swift
-//  Broker Portal
-//
-//  Created by Pankaj on 14/05/25.
+////
+////  KeyboardManager.swift
+////  Broker Portal
+////
+////  Created by Pankaj on 14/05/25.
 //
 
 import UIKit
 
-public final class KeyboardManager {
-
-    public static let shared = KeyboardManager()
-    private var isEnabled = false
-
-    private init() {}
-
-    public func enable() {
-        guard !isEnabled else { return }
-        isEnabled = true
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillChange),
-            name: UIResponder.keyboardWillChangeFrameNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
+final class KeyboardManager: NSObject {
+    
+    static let shared = KeyboardManager()
+    
+    private var toolbar: UIToolbar!
+    private var keyboardFrame: CGRect = .zero
+    private var isKeyboardVisible = false
+    
+    private override init() {
+        super.init()
+        configureToolbar()
+        registerNotifications()
     }
-
-    @objc private func keyboardWillChange(notification: Notification) {
-        adjustKeyboard(with: notification, isHiding: false)
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
-
-    @objc private func keyboardWillHide(notification: Notification) {
-        adjustKeyboard(with: notification, isHiding: true)
+    
+    // Call this once from AppDelegate
+    @MainActor
+    func enable() {
+        // Assign toolbar globally
+        UITextField.appearance().inputAccessoryView = toolbar
+        UITextView.appearance().inputAccessoryView = toolbar
     }
-
-    private func adjustKeyboard(with notification: Notification, isHiding: Bool) {
+    
+    // MARK: - Notifications
+    
+    private func registerNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    // MARK: - Toolbar Configuration
+    
+    private func configureToolbar() {
+        toolbar = UIToolbar()
+        toolbar.barStyle = .default
+        toolbar.isTranslucent = true
+        toolbar.tintColor = .systemBlue
+        toolbar.sizeToFit()
+        
+        let cancel = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelTapped))
+        let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped))
+        
+        toolbar.items = [cancel, flexible, done]
+    }
+    
+    @objc private func doneTapped() {
+        UIApplication.shared.sendAction(#selector(UIView.endEditing(_:)), to: nil, from: nil, for: nil)
+    }
+    
+    @objc private func cancelTapped() {
+        UIApplication.shared.sendAction(#selector(UIView.endEditing(_:)), to:
+                                            nil, from: nil, for: nil)
+    }
+    
+    // MARK: - Keyboard Handling
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
-              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
-              let window = UIApplication.shared.connectedScenes
-                .compactMap({ $0 as? UIWindowScene })
-                .flatMap({ $0.windows })
-                .first(where: \.isKeyWindow),
-              let rootVC = window.rootViewController,
-              let topVC = Self.findTopViewController(from: rootVC),
-              let scrollView = Self.findScrollView(in: topVC.view)
-        else { return }
-
-        let bottomInset = isHiding ? 0 : keyboardFrame.height + 20
-
-        UIView.animate(withDuration: 0.25) {
-            scrollView.contentInset.bottom = bottomInset
-            scrollView.verticalScrollIndicatorInsets.bottom = bottomInset
+              let frame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        
+        keyboardFrame = frame
+        isKeyboardVisible = true
+        adjustScrollViewInsets()
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        isKeyboardVisible = false
+        resetScrollViewInsets()
+    }
+    
+    private func adjustScrollViewInsets() {
+        guard let activeField = findFirstResponder(in: UIApplication.shared.activeWindow?.rootViewController?.view ?? UIView()) as? UIView,
+              let scrollView = activeField.findSuperview(of: UIScrollView.self) else { return }
+        
+        var bottomInset = keyboardFrame.height
+        if let window = UIApplication.shared.activeWindow {
+            bottomInset -= window.safeAreaInsets.bottom
+        }
+        
+        var contentInset = scrollView.contentInset
+        contentInset.bottom = bottomInset + 20
+        scrollView.contentInset = contentInset
+        scrollView.scrollIndicatorInsets = contentInset
+        
+        let fieldFrame = activeField.convert(activeField.bounds, to: scrollView)
+        scrollView.scrollRectToVisible(fieldFrame, animated: true)
+    }
+    
+    private func resetScrollViewInsets() {
+        guard let activeField = findFirstResponder(in: UIApplication.shared.activeWindow?.rootViewController?.view ?? UIView()) as? UIView,
+              let scrollView = activeField.findSuperview(of: UIScrollView.self) else { return }
+        
+        UIView.animate(withDuration: 0.3) {
+            scrollView.contentInset = .zero
+            scrollView.scrollIndicatorInsets = .zero
         }
     }
-
-    public static func attachToolbarAndDismissGesture(to view: UIView) {
-        applyToolbar(to: view)
-        addTapToDismiss(to: view)
-    }
-
-    private static func applyToolbar(to view: UIView, toolbar: UIToolbar? = nil) {
-        let sharedToolbar = toolbar ?? KeyboardToolbar(view: view)
+    
+    // MARK: - Utility Functions
+    
+    private func findFirstResponder(in view: UIView) -> UIResponder? {
+        if view.isFirstResponder { return view }
         for subview in view.subviews {
-            switch subview {
-            case let tf as UITextField:
-                tf.inputAccessoryView = sharedToolbar
-            case let tv as UITextView:
-                tv.inputAccessoryView = sharedToolbar
-            default:
-                applyToolbar(to: subview, toolbar: sharedToolbar)
+            if let responder = findFirstResponder(in: subview) {
+                return responder
             }
-        }
-    }
-
-    private static func addTapToDismiss(to view: UIView) {
-        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:)))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-
-    private static func findScrollView(in view: UIView?) -> UIScrollView? {
-        guard let view = view else { return nil }
-        if let scroll = view as? UIScrollView { return scroll }
-        for sub in view.subviews {
-            if let found = findScrollView(in: sub) { return found }
         }
         return nil
     }
+}
 
-    private static func findTopViewController(from root: UIViewController?) -> UIViewController? {
-        if let nav = root as? UINavigationController {
-            return findTopViewController(from: nav.visibleViewController)
-        } else if let tab = root as? UITabBarController {
-            return findTopViewController(from: tab.selectedViewController)
-        } else if let presented = root?.presentedViewController {
-            return findTopViewController(from: presented)
-        } else {
-            return root
-        }
+// MARK: - UIView Helper
+
+private extension UIView {
+    func findSuperview<T: UIView>(of type: T.Type) -> T? {
+        return superview as? T ?? superview?.findSuperview(of: type)
     }
 }
 
-private final class KeyboardToolbar: UIToolbar {
-    private weak var targetView: UIView?
+// MARK: - UIApplication Helper (iOS 13 - iOS 18 safe)
 
-    init(view: UIView) {
-        self.targetView = view
-        super.init(frame: .zero)
-        sizeToFit()
-        let done = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneTapped))
-        items = [.flexibleSpace(), done]
-    }
-
-    @objc private func doneTapped() {
-        targetView?.endEditing(true)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+private extension UIApplication {
+    var activeWindow: UIWindow? {
+        if #available(iOS 15.0, *) {
+            return connectedScenes
+                .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+                .first
+        } else {
+            return windows.first { $0.isKeyWindow }
+        }
     }
 }

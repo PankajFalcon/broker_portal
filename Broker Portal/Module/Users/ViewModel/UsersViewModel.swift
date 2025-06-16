@@ -49,22 +49,22 @@ class UsersViewModel{
             let view = self.view,
             let url = APIConstants.updateUser(self.filterModel?[index].id ?? 0)
         else {
-            Log.error("Invalid view or URL.")
+            Log.error(ErrorMessages.invalidURL.rawValue)
             return
         }
         
         var params = self.filterModel?[index].toDictionary() ?? [:]
         
         params[ConstantApiParam.AgencyID] = await UserDefaultsManager.shared.getAgencyID()
-        params["user_status"] = self.filterModel?[index].user_status == .active ? "Inactive" : "Active"
+        params["user_status"] = self.filterModel?[index].user_status == .active ? UserStatus.inactive.rawValue : UserStatus.active.rawValue
         params["gender"] = "Male"
         params["default_user"] = "N"
         params["supervisor"] = NSNull()
         params["internal_user"] = 0
         params["entity_id"] = NSNull()
         params[ConstantParam.PasswordUser.rawValue] = "pwd@1234"
-        params.removeValue(forKey: "id")
-        params.removeValue(forKey:"user_type")
+        //        params.removeValue(forKey: "id")
+        //        params.removeValue(forKey:"user_type")
         Log.debug(params)
         
         Task {
@@ -76,15 +76,20 @@ class UsersViewModel{
                     responseType: AddUserResponseModel.self
                 )
                 
-                if response.status != 0 {
-                    // ✅ Handle success scenario
-                    await ToastManager.shared.showToast(message: response.message)
-                    //self.filterModel?[index].user_status = self.filterModel?[index].user_status == .active ? .inactive : .active
-                    await view.tableView.refresh()
-                } else {
+                guard response.status != 0 else {
                     // ❌ API reported failure
                     await ToastManager.shared.showToast(message: response.message)
+                    return
                 }
+                
+                // ✅ Handle success scenario
+                await ToastManager.shared.showToast(message: response.message)
+                
+                if let currentStatus = filterModel?[index].user_status {
+                    filterModel?[index].user_status = (currentStatus == .active) ? .inactive : .active
+                }
+                
+                await view.tableView.refresh()
                 
             } catch {
                 // ❗ Handle networking/decoding errors

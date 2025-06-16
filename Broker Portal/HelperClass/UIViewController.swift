@@ -10,10 +10,10 @@ import UIKit
 
 // From inside any view controller with a navigation controller
 
-//push(ProfileViewController.self, from: .main)
+// push(ProfileViewController.self, from: .main)
 //
 //// With configuration
-//push(SettingsViewController.self, from: .settings) { vc in
+// push(SettingsViewController.self, from: .settings) { vc in
 //    vc.userID = "12345"
 //    vc.isDarkModeEnabled = true
 //}
@@ -67,19 +67,19 @@ extension UIViewController {
         in array: [T],
         valuePath: KeyPath<T, V?>,
         isRequiredPath: KeyPath<T, Bool?>
-    ) -> Bool where V: Collection {
-        for item in array {
+    ) -> Int? where V: Collection {
+        for (index, item) in array.enumerated() {
             let isRequired = item[keyPath: isRequiredPath]
             
-            if isRequired == true{
-                guard let value = item[keyPath: valuePath], !value.isEmpty else {
-                    return false
+            if isRequired == true {
+                let value = item[keyPath: valuePath]
+                if value == nil || value?.isEmpty == true {
+                    return index
                 }
             }
         }
-        return true
+        return nil
     }
-    
     
     func presentPopup(
         from parentVC: UIViewController,
@@ -105,13 +105,12 @@ extension UIViewController {
         parentVC.present(popup, animated: true)
     }
     
-    
-    
     /// Instantiate a view controller from a storyboard.
     /// - Parameters:
     ///   - storyboardName: The name of the storyboard file.
     ///   - identifier: The view controller's storyboard ID. If nil, the class name will be used.
     /// - Returns: An instantiated view controller of the expected type.
+    
     static func instantiate<T: UIViewController>(fromStoryboard storyboardName: AppStoryboard, identifier: AppIdentifire? = nil) -> T {
         let storyboard = UIStoryboard(name: storyboardName.rawValue, bundle: nil)
         let id = identifier?.rawValue ?? String(describing: T.self)
@@ -156,13 +155,13 @@ extension UIViewController {
 
 extension UIViewController {
     
-    //MARK: How to use
+    // MARK: How to use
     //        configureNavigationBar(title: "Abc",leftImage: UIImage(named: "Vector"), leftAction:  {
     //            debugPrint("Tap")
     //        })
     
     /// Configure navigation bar with customizable left and right buttons (memory-safe)
-    /// - Parameters:
+    ///   - Parameters:
     ///   - title: Title to display in the navigation bar
     ///   - leftTitle: Optional left button title
     ///   - leftImage: Optional left button image
@@ -171,25 +170,27 @@ extension UIViewController {
     ///   - rightImage: Optional right button image
     ///   - rightAction: Action closure for right button
     
-    func actionSheet(agencyID: Int) {
+    func actionSheet(agencyID: Bool) {
         var actions: [ActionSheetAction] = [
             .init(title: "User Profile", type: .default, handler: {
                 Log.error("User Profile tapped")
             })
         ]
         
-        if agencyID == 41 {
+        if agencyID {
             actions.append(
                 .init(title: "Change Agency", type: .default, handler: {
                     Task {
                         self.present(SelectAgencyVC.self, from: .main) { vc in
                             vc.saveAgency = {
-                                Task {
-                                    if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                                       let sceneDelegate = scene.delegate as? SceneDelegate {
-                                        await sceneDelegate.setRoot()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                                    Task { @MainActor in
+                                        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                           let sceneDelegate = scene.delegate as? SceneDelegate {
+                                            await sceneDelegate.setRoot()
+                                        }
                                     }
-                                }
+                                })
                             }
                         }
                     }
@@ -200,15 +201,18 @@ extension UIViewController {
         actions.append(contentsOf: [
             .init(title: "Logout", type: .destructive, handler: {
                 self.presentPopup(from: self, mainTitle: .Logout, subTitle: .Logout, btnOkTitle: .Yes, btnCancelTitle: .No) {
-                    Task {
-                        await UserDefaultsManager.shared.clearAll()
-                        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                           let sceneDelegate = scene.delegate as? SceneDelegate {
-                            await sceneDelegate.setRoot()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        Task { @MainActor in
+                            await UserDefaultsManager.shared.clearAll()
+                            
+                            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                               let sceneDelegate = scene.delegate as? SceneDelegate {
+                                await sceneDelegate.setRoot()
+                            }
                         }
                     }
+                    
                 }
-                
             }),
             .init(title: "Cancel", type: .cancel, handler: nil)
         ])
@@ -219,7 +223,7 @@ extension UIViewController {
             let lastName = await UserDefaultsManager.shared.fatchCurentUser()?.lastName ?? ""
             let agencyName = await UserDefaultsManager.shared.getSelectedAgency()?.name ?? ""
             
-            let title = agencyID == 41 ? "\(firstName) \(lastName)\n\(agencyName)" : "\(firstName) \(lastName)"
+            let title = agencyID ? "\(firstName) \(lastName)\n\(agencyName)" : "\(firstName) \(lastName)"
             
             ActionSheetHelper.showActionSheet(
                 on: self,
@@ -322,7 +326,8 @@ extension UIViewController {
                     //                     action()
                     if isRightCustomImage == true{
                         Task{
-                            await self.actionSheet(agencyID: UserDefaultsManager.shared.fatchCurentUser()?.userTypeId ?? 0)
+                            let isAdmin = await UserDefaultsManager.shared.isAdmin()
+                            self.actionSheet(agencyID: isAdmin)
                         }
                     }else{
                         //                        action()
