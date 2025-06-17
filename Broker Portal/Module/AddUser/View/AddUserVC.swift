@@ -17,6 +17,14 @@ class AddUserVC: UIViewController {
     private let dropdown = DropdownView()
     private var checkValidation = false
     
+    deinit {
+        Log.debug("AddUserVC deinitialized")
+        viewModel = nil
+        userDetails = nil
+        viewModel?.userFields.removeAll()
+    }
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -107,8 +115,9 @@ class AddUserVC: UIViewController {
             }
             
         } else {
-            Task {
-                await viewModel?.addAndUpdateUser(isEdit: userDetails != nil)
+            Task { [weak self] in
+                guard let self else { return }
+                await self.viewModel?.addAndUpdateUser(isEdit: self.userDetails != nil)
             }
         }
     }
@@ -187,12 +196,17 @@ extension AddUserVC {
     private func showDropdown(txtAgency: UITextField, dropDownValue: [String]) {
         guard !dropDownValue.isEmpty else { return }
         view.endEditing(true)
+        
         dropdown.show(from: txtAgency, data: dropDownValue) { [weak self] selected in
-            guard self != nil else { return }
-            self?.viewModel?.userFields[txtAgency.tag].value = self?.viewModel?.userFields[txtAgency.tag].dropdownValue?.filter({$0.label == selected}).first?.value
-            self?.tableView.refresh()
+            guard let self,
+                  txtAgency.tag < self.viewModel?.userFields.count ?? 0,
+                  let dropdownOption = self.viewModel?.userFields[txtAgency.tag].dropdownValue?.first(where: { $0.label == selected }) else { return }
+
+            self.viewModel?.userFields[txtAgency.tag].value = dropdownOption.value
+            self.tableView.refresh()
         }
     }
+
 }
 
 extension AddUserVC: UITextFieldDelegate {

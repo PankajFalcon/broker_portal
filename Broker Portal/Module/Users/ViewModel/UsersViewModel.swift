@@ -18,31 +18,29 @@ class UsersViewModel{
     }
     
     func fetchBrokerUserList() async {
-        
         guard let url = APIConstants.brokerUserList(await UserDefaultsManager.shared.getAgencyID()) else { return }
-        
-        Task {
-            do {
-                let response: UsersModel = try await APIManagerHelper.shared.handleRequest(
-                    .getRequest(url: url, headers: nil),
-                    responseType: UsersModel.self
-                )
-                
-                if response.status != 0 {
-                    self.model = response
-                    self.filterModel = response.data ?? []
-                    await self.view?.tableView.refresh()
-                    await self.view?.tableView.setEmptyMessage(ErrorMessages.nouserfound.rawValue, self.model?.data?.count ?? 0)
-                } else {
-                    await self.view?.tableView.setEmptyMessage(response.message ?? "", self.model?.data?.count ?? 0)
-                    await ToastManager.shared.showToast(message: response.message)
-                }
-            } catch {
-                await self.view?.tableView.setEmptyMessage(error.localizedDescription, self.model?.data?.count ?? 0)
-                await ToastManager.shared.showToast(message: error.localizedDescription)
+
+        do {
+            let response: UsersModel = try await APIManagerHelper.shared.handleRequest(
+                .getRequest(url: url, headers: nil),
+                responseType: UsersModel.self
+            )
+            
+            if response.status != 0 {
+                self.model = response
+                self.filterModel = response.data ?? []
+                await self.view?.tableView.refresh()
+                await self.view?.tableView.setEmptyMessage(ErrorMessages.nouserfound.rawValue, self.model?.data?.count ?? 0)
+            } else {
+                await self.view?.tableView.setEmptyMessage(response.message ?? "", self.model?.data?.count ?? 0)
+                await ToastManager.shared.showToast(message: response.message)
             }
+        } catch {
+            await self.view?.tableView.setEmptyMessage(error.localizedDescription, self.model?.data?.count ?? 0)
+            await ToastManager.shared.showToast(message: error.localizedDescription)
         }
     }
+
     
     func activeOrInactive(index:Int) async {
         guard

@@ -8,206 +8,192 @@
 import UIKit
 
 class DashboardVC: UIViewController {
-    
+
     // MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var txtSearch: UITextField!
     @IBOutlet weak var btnPolicy: UIButton!
     @IBOutlet weak var btnActivity: UIButton!
-    
+
     // MARK: - Properties
     private var viewModel: DashboardViewModel?
-    private let debouncer = Debouncer(delay: 0.5) // 0.5 seconds delay
-    private var isActivity : Bool?
-    
-    private var responseModel : [RecentActivityRecord]?
-    
-    // MARK: - Lifecycle Methods
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Initialize ViewModel
-        viewModel = DashboardViewModel(view: self)
-        viewModel?.model = DashboardRequestModel()
-        
-        // Configure navigation bar
-        configureNavigationBar(
-            title: AppTitle.Dashboard.rawValue,leftImage: .menu,leftAction: {
-                SideMenuManager.shared.toggleMenu()
-            },isRightCustomImage: true)
-        
-        setupSearchTextField()
-        
-        Task{
-            // Initial button setup
-            await setupButtonStates(isActivitySelected: true)
-        }
-        setupTableView()
+    private let debouncer = Debouncer(delay: 0.5)
+    private var isActivity: Bool?
+    private var responseModel: [RecentActivityRecord]?
+
+    deinit{
+        Log.debug("DashboardVC deinit")
     }
     
-    private func setupTableView(){
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        viewModel = DashboardViewModel(view: self)
+        viewModel?.model = DashboardRequestModel()
+
+        configureNavigationBar(
+            title: AppTitle.Dashboard.rawValue,
+            leftImage: .menu,
+            leftAction: { SideMenuManager.shared.toggleMenu() },
+            isRightCustomImage: true
+        )
+
+        setupSearchTextField()
+        setupTableView()
+
+        Task { [weak self] in
+            await self?.setupButtonStates(isActivitySelected: true)
+        }
+    }
+
+    private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
         tableView.showsHorizontalScrollIndicator = false
         tableView.showsVerticalScrollIndicator = false
         tableView.register(cellType: ActivityAndPolicyXIB.self)
-        tableView.addRefreshControl {
-            Task{
-                await self.refreshData()
+
+        tableView.addRefreshControl { [weak self] in
+            Task {
+                await self?.refreshData()
             }
         }
     }
-    
+
     private func refreshData() async {
-        // Your API call or logic
         view.endEditing(true)
         tableView.endRefreshing()
         viewModel?.model?.page = 1
-        if isActivity == true{
+        if isActivity == true {
             await fetchActivities()
-        }else{
+        } else {
             await fetchPolicy()
         }
     }
-    
+
     private func setupSearchTextField() {
         txtSearch.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         txtSearch.translatesAutoresizingMaskIntoConstraints = false
     }
-    
+
     @objc private func textFieldDidChange(_ textField: UITextField) {
         let query = textField.text ?? ""
-        
+
+
         debouncer.run { [weak self] in
             guard let self = self else { return }
-            Task{
-                await self.performSearch(with: query)
+            Task { [weak self] in
+                await self?.performSearch(with: query)
             }
         }
     }
-    
+
     private func performSearch(with query: String) async {
         viewModel?.model?.page = 1
-        if isActivity == true{
+        if isActivity == true {
             await fetchActivities()
-        }else{
+        } else {
             await fetchPolicy()
         }
     }
-    
+
     // MARK: - Button Actions
     @IBAction func activityOnPress(_ sender: UIButton) {
-        Task{
-            await setupButtonStates(isActivitySelected: true)
+        Task { [weak self] in
+            await self?.setupButtonStates(isActivitySelected: true)
         }
     }
-    
+
     @IBAction func policyOnPress(_ sender: UIButton) {
-        Task{
-            await setupButtonStates(isActivitySelected: false)
+        Task { [weak self] in
+            await self?.setupButtonStates(isActivitySelected: false)
         }
     }
-    
-    // MARK: - Helper Methods
-    
-    /// Updates button states for activity and policy
+
     private func setupButtonStates(isActivitySelected: Bool) async {
-        // Activity button selected
-        viewModel?.model?.page = 1
-        if isActivitySelected == isActivity{
-            return
-        }
+        guard isActivity != isActivitySelected else { return }
         isActivity = isActivitySelected
+
+        btnActivity.backgroundColor = isActivitySelected ? .HeaderGreenColor : .AppWhiteColor
+        btnPolicy.backgroundColor = isActivitySelected ? .AppWhiteColor : .HeaderGreenColor
+
+        btnActivity.setTitleColor(isActivitySelected ? .AppWhiteColor : .HeaderGreenColor, for: .normal)
+        btnPolicy.setTitleColor(isActivitySelected ? .HeaderGreenColor : .AppWhiteColor, for: .normal)
+
+        viewModel?.model?.page = 1
         if isActivitySelected {
-            btnActivity.backgroundColor = .HeaderGreenColor
-            btnPolicy.backgroundColor = .AppWhiteColor
-            btnActivity.setTitleColor(.AppWhiteColor, for: .normal)
-            btnPolicy.setTitleColor(.HeaderGreenColor, for: .normal)
             await fetchActivities()
-        } else { // Policy button selected
-            btnActivity.backgroundColor = .AppWhiteColor
-            btnPolicy.backgroundColor = .HeaderGreenColor
-            btnActivity.setTitleColor(.HeaderGreenColor, for: .normal)
-            btnPolicy.setTitleColor(.AppWhiteColor, for: .normal)
+        } else {
             await fetchPolicy()
         }
     }
-    
-    /// Fetch recent activities asynchronously
+
     private func fetchActivities() async {
-        guard let viewModel = viewModel else { return }
-        self.isActivity = true
-        Task {
-            
-            viewModel.model?.insured_name = txtSearch.trim()
-            
-            do {
-                let response = try await viewModel.getRecentActivity()
-                if viewModel.model?.page == 1 {
-                    responseModel = response?.data?.records
-                } else if let newRecords = response?.data?.records {
-                    responseModel = (responseModel ?? []) + newRecords
-                }
-                
-                if response?.data?.records?.count ?? 0 < viewModel.model?.limit ?? 0{
-                    viewModel.isLoading = false
-                }else{
-                    viewModel.isLoading = true
-                }
-                
-                tableView.setEmptyMessage("No recent activity found.", self.responseModel?.count ?? 0)
-                tableView.refresh()
-            } catch {
-                // Handle error (e.g., show an alert)
-                Log.error("Failed to fetch activities: \(error.localizedDescription)")
-                responseModel?.removeAll()
-                tableView.refresh()
-                await ToastManager.shared.showToast(message: error.localizedDescription)
+        guard let viewModel else { return }
+        isActivity = true
+
+        viewModel.model?.insured_name = txtSearch.trim()
+
+        do {
+            let response = try await viewModel.getRecentActivity()
+
+            if viewModel.model?.page == 1 {
+                responseModel = response?.data?.records
+            } else if let newRecords = response?.data?.records {
+                responseModel = (responseModel ?? []) + newRecords
             }
+
+            viewModel.isLoading = (response?.data?.records?.count ?? 0) >= (viewModel.model?.limit ?? 0)
+
+            tableView.setEmptyMessage("No recent activity found.", responseModel?.count ?? 0)
+            tableView.refresh()
+
+        } catch {
+            Log.error("Failed to fetch activities: \(error.localizedDescription)")
+            responseModel?.removeAll()
+            tableView.refresh()
+            await ToastManager.shared.showToast(message: error.localizedDescription)
         }
     }
-    
-    /// Fetch policy asynchronously
+
     private func fetchPolicy() async {
-        guard let viewModel = viewModel else { return }
-        self.isActivity = false
-        Task {
-            
-            viewModel.model?.insured_name = txtSearch.trim()
-            
-            do {
-                let response = try await viewModel.getPolicy()
-                if viewModel.model?.page == 1 {
-                    responseModel = response?.data?.records
-                } else if let newRecords = response?.data?.records {
-                    responseModel = (responseModel ?? []) + newRecords
-                }
-                if response?.data?.records?.count ?? 0 < viewModel.model?.limit ?? 0{
-                    viewModel.isLoading = false
-                }else{
-                    viewModel.isLoading = true
-                }
-                tableView.setEmptyMessage("No policy found.", self.responseModel?.count ?? 0)
-                tableView.refresh()
-            } catch {
-                // Handle error (e.g., show an alert)
-                Log.error("Failed to fetch policy: \(error.localizedDescription)")
-                responseModel?.removeAll()
-                tableView.setEmptyMessage(error.localizedDescription, self.responseModel?.count ?? 0)
-                tableView.refresh()
-                await ToastManager.shared.showToast(message: error.localizedDescription)
+        guard let viewModel else { return }
+        isActivity = false
+
+        viewModel.model?.insured_name = txtSearch.trim()
+
+        do {
+            let response = try await viewModel.getPolicy()
+
+            if viewModel.model?.page == 1 {
+                responseModel = response?.data?.records
+            } else if let newRecords = response?.data?.records {
+                responseModel = (responseModel ?? []) + newRecords
             }
+
+            viewModel.isLoading = (response?.data?.records?.count ?? 0) >= (viewModel.model?.limit ?? 0)
+
+            tableView.setEmptyMessage("No policy found.", responseModel?.count ?? 0)
+            tableView.refresh()
+
+        } catch {
+            Log.error("Failed to fetch policy: \(error.localizedDescription)")
+            responseModel?.removeAll()
+            tableView.setEmptyMessage(error.localizedDescription, responseModel?.count ?? 0)
+            tableView.refresh()
+            await ToastManager.shared.showToast(message: error.localizedDescription)
         }
     }
 }
 
 extension DashboardVC: UITableViewDelegate, UITableViewDataSource {
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return responseModel?.count ?? 0
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: ActivityAndPolicyXIB = tableView.dequeueReusableCell(for: indexPath)
         if let data = responseModel?[indexPath.row] {
@@ -215,7 +201,7 @@ extension DashboardVC: UITableViewDelegate, UITableViewDataSource {
         }
         return cell
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let viewModel, viewModel.isLoading == true else { return }
         
@@ -241,5 +227,5 @@ extension DashboardVC: UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
-    
+
 }

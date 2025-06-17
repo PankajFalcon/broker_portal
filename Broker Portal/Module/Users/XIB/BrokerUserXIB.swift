@@ -24,6 +24,13 @@ class BrokerUserXIB: UITableViewCell {
         // Initialization code
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        btnEdit.removeTarget(nil, action: nil, for: .allEvents)
+        btnActive.removeTarget(nil, action: nil, for: .allEvents)
+        btnChangePassword.removeTarget(nil, action: nil, for: .allEvents)
+    }
+    
     func setupData(model:UsersListModel?){
         lblName.text = "\(model?.first_name ?? "") \(model?.last_name ?? "")"
         lblEmail.text = model?.email ?? ""

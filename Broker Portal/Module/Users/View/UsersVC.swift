@@ -14,6 +14,13 @@ class UsersVC: UIViewController {
     
     private var viewModel : UsersViewModel?
     
+    deinit {
+        Log.debug("UsersVC deinit")
+        viewModel?.filterModel = nil
+        viewModel?.model = nil
+        viewModel = nil
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,18 +38,26 @@ class UsersVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        Task{
-            await viewModel?.fetchBrokerUserList()
+        Task { [weak self] in
+            guard let self else { return }
+            await self.viewModel?.fetchBrokerUserList()
         }
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        Log.debug("UsersVC viewDidDisappear")
+    }
+
     
     private func setupTableView(){
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
         tableView.register(cellType: BrokerUserXIB.self)
-        tableView.addRefreshControl {
-            Task{
+        tableView.addRefreshControl { [weak self] in
+            guard let self else { return }
+            Task {
                 await self.refreshData()
             }
         }
@@ -120,10 +135,12 @@ extension UsersVC:UITableViewDelegate,UITableViewDataSource{
         cell.btnChangePassword.tag = indexPath.row
         cell.btnActive.tag = indexPath.row
         
-        Task{
-            cell.btnEdit.isHidden = await UserDefaultsManager.shared.isAdmin()
-            cell.btnActive.isHidden = await UserDefaultsManager.shared.isAdmin()
-            cell.btnChangePassword.isHidden = await UserDefaultsManager.shared.isAdmin()
+        Task { [weak cell] in
+            guard let cell else { return }
+            let isAdmin = await UserDefaultsManager.shared.isAdmin()
+            cell.btnEdit.isHidden = isAdmin
+            cell.btnActive.isHidden = isAdmin
+            cell.btnChangePassword.isHidden = isAdmin
         }
         
         cell.btnEdit.addTarget(self, action: #selector(editOnPress(sender:)), for: .touchUpInside)

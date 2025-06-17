@@ -18,15 +18,18 @@ final class Debouncer {
     }
 
     func run(action: @escaping () -> Void) {
-        // Cancel the previous work item if it exists
+        // Cancel any existing work item
         workItem?.cancel()
 
         // Create a new work item
-        workItem = DispatchWorkItem(block: action)
+        let newItem = DispatchWorkItem(block: action)
+        workItem = newItem
 
-        // Execute the work item after the delay
-        if let workItem = workItem {
-            queue.asyncAfter(deadline: .now() + delay, execute: workItem)
-        }
+        // Schedule it on the queue
+        queue.asyncAfter(deadline: .now() + delay, execute: newItem)
+    }
+
+    deinit {
+        workItem?.cancel() // Cancel on deallocation for safety
     }
 }
